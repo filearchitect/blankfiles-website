@@ -1,6 +1,8 @@
-# Blank files download page
+# Blank files website
 
-This is the site to download blank files from [blank-files](https://github.com/filearchitect/blank-files). If you want to add files, add them there.
+This is the code that powers blankfiles.com. Minimal working files of all types.
+
+The files and js pacakge can be found in [blank-files](https://github.com/filearchitect/blank-files). If you want to add files, add them there.
 
 ## Deployment
 
