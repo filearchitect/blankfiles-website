@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.FORGE_SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "public/build/"
-          target: "/home/forge/blank-files.com/public/"
+          target: "/home/forge/blankfiles.com/public/"
           strip_components: 1
 
   deploy:
