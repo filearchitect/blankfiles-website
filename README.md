@@ -1,6 +1,6 @@
 # Blank files download page
 
-This is the site to download blank files from [blank-files](https://github.com/filearchitect/blank-files)
+This is the site to download blank files from [blank-files](https://github.com/filearchitect/blank-files). If you want to add files, add them there.
 
 ## Support
 
