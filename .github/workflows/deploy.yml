@@ -1,17 +1,17 @@
-name: Deploy Application
+name: Build and Deploy to Laravel Forge
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -19,14 +19,37 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: Build Application
+      - name: Build Frontend
         run: npm run build
 
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
+      - name: Transfer Build Folder
+        uses: appleboy/scp-action@master
         with:
-          name: build-files
-          path: public/build
+          host: ${{ secrets.FORGE_SSH_HOST }}
+          username: ${{ secrets.FORGE_SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "public/build/"
+          target: "/home/forge/blank-files.com/public/"
+          strip_components: 1
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Trigger Laravel Forge Deployment
+        run: |
+          curl -X POST -d "" "https://forge.laravel.com/servers/${{ secrets.FORGE_SERVER_ID }}/sites/${{ secrets.FORGE_SITE_ID }}/deploy?token=${{ secrets.FORGE_API_KEY }}"
+
+      - name: SSH into Server and Clear Cache
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.FORGE_SSH_HOST }}
+          username: ${{ secrets.FORGE_SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/forge/blank-files.com
+            php artisan optimize:clear
