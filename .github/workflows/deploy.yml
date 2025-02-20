@@ -51,5 +51,5 @@ jobs:
           username: ${{ secrets.FORGE_SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/forge/blank-files.com
+            cd /home/forge/blankfiles.com
             php artisan optimize:clear
