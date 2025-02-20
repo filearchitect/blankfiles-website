@@ -1,23 +1,6 @@
-# File Management System
+# Blank files download page
 
-A simple and intuitive file management application that allows users to upload, organize, and share files securely.
-
-## Overview
-
-This web application provides an easy way to manage your files online. Built with Laravel and modern web technologies, it offers a clean interface for handling your digital documents.
-
-## Key Features
-
--   Simple file upload and download
--   Secure file storage
--   User authentication
--   File organization
--   Easy file sharing
--   Clean, responsive interface
-
-## Getting Started
-
-Visit our application at [your-domain.com](https://your-domain.com) and create an account to start managing your files today.
+This is the site to download blank files from [blank-files](https://github.com/filearchitect/blank-files)
 
 ## Support
 
