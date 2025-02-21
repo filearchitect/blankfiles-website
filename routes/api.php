@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\FileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-Route::prefix('files')->group(function () {
-    Route::get('/', [FileController::class, 'index']);
-    Route::get('{category}/{filename}', [FileController::class, 'show']);
-    Route::get('{category}/{filename}/download', [FileController::class, 'download']);
+Route::prefix('v1')->group(function () {
+    Route::prefix('files')->middleware(['throttle:30,1'])->group(function () {
+        Route::get('/', [FileController::class, 'index']);
+        Route::get('{type}', [FileController::class, 'getByType']);
+    });
 });
