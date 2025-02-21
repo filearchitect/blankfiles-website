@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class FilesController extends Controller {
@@ -9,13 +10,11 @@ class FilesController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        $response = Http::get('https://cdn.jsdelivr.net/gh/filearchitect/blank-files@main/files/index.json?_refresh');
+        $files = Cache::remember('files.index', 60 * 60 * 24, function () {
+            return Http::get(config('app.cdn_url') . '/files/index.json')->json();
+        });
 
-        $data = [
-            'files' => $response->json(),
-        ];
-
-        return view('files.index', $data);
+        return view('files.index', ['files' => $files]);
     }
 
     /**
@@ -61,10 +60,11 @@ class FilesController extends Controller {
     }
 
     public function download($category, $filename) {
-        $fileUrl = "https://cdn.jsdelivr.net/gh/filearchitect/blank-files@main/files/{$category}/{$filename}";
+        $fileUrl = config('app.cdn_url') . "/files/{$category}/{$filename}";
 
-        // Get the file contents
-        $contents = Http::get($fileUrl)->body();
+        $contents = Cache::remember("files.{$category}.{$filename}", 60 * 60 * 24, function () use ($fileUrl) {
+            return Http::get($fileUrl)->body();
+        });
 
         // Get file extension
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
