@@ -14,7 +14,7 @@
             <div class="mb-8 bg-white">
                 <div class="py-4 border-b border-gray-200">
                     <h2 class="text-xl font-semibold text-gray-800">
-                        {{ Str::ucfirst($category) }}
+                        {{ Str::ucfirst(str_replace('-', ' ', $category)) }}
                     </h2>
                 </div>
                 

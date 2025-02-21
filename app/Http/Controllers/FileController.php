@@ -9,7 +9,9 @@ class FileController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        $filesData = Http::get(config('app.cdn_url') . '/files/index.json')->json();
+        $filesData = cache()->remember('cdn_files', now()->addHours(1), function () {
+            return Http::get(config('app.cdn_url') . '/files/index.json')->json();
+        });
 
         $files = collect($filesData['files'])->map(function ($file) {
             return [
