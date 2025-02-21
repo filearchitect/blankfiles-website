@@ -12,9 +12,17 @@ class FileService {
      * @return array
      */
     public function getAllFiles(): array {
-        return Cache::remember('cdn_files', now()->addHours(1), function () {
-            return Http::get(config('app.cdn_url') . '/files/index.json')->json();
-        });
+        if (config('cache.cache_enabled')) {
+            return Cache::remember('cdn_files', now()->addHours(1), function () {
+                return $this->fetchFilesFromCDN('/files/index.json');
+            });
+        }
+
+        return $this->fetchFilesFromCDN('/files/index.json');
+    }
+
+    public function fetchFilesFromCDN(string $path = '/files/index.json') {
+        return Http::get(config('app.cdn_url') . $path)->json();
     }
 
     /**
@@ -29,7 +37,7 @@ class FileService {
             return [
                 'category' => $file['category'],
                 'type'     => $file['type'],
-                'url'      => config('app.cdn_url') . "/files/{$file['category']}/{$file['url']}",
+                'url'      => config('app.cdn_url') . "/files/{$file['url']}",
             ];
         });
     }

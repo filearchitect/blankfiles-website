@@ -25,6 +25,7 @@
                             data-url="{{ $file['url'] }}"
                             data-type="{{ $file['type'] }}"
                         >
+                        
                             {{ Str::upper($file['type']) }}
                         </button>
                     @endforeach
