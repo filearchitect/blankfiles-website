@@ -62,7 +62,7 @@ class FilesController extends Controller {
     public function download($category, $filename) {
         $fileUrl = config('app.cdn_url') . "/files/{$category}/{$filename}";
 
-        $contents = Cache::remember("files.{$category}.{$filename}", 60 * 60 * 24, function () use ($fileUrl) {
+        $contents = Cache::remember("files.{$category}.{$filename}", 60 * 60 * 24 * 30, function () use ($fileUrl) {
             return Http::get($fileUrl)->body();
         });
 
