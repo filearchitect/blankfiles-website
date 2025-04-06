@@ -11,11 +11,11 @@ class FileService {
      * @return array
      */
     public function getAllFiles(): array {
-        // if (config('cache.cache_enabled')) {
-        //     return Cache::remember('cdn_files', now()->addHours(1), function () {
-        //         return $this->fetchFilesFromCDN('/files/files.json');
-        //     });
-        // }
+        if (config('cache.cache_enabled')) {
+            return Cache::remember('cdn_files', now()->addHours(1), function () {
+                return $this->fetchFilesFromCDN('/files/files.json');
+            });
+        }
 
         return $this->fetchFilesFromCDN('/files/files.json');
     }
