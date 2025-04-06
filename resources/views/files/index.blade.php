@@ -17,11 +17,14 @@
                 <div class="py-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                     @foreach($files as $file)
                         <button 
-                            class="download-button  px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 text-center transition-colors"
+                            class="download-button relative px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 text-center transition-colors "
                             data-url="{{ $file['url'] }}"
                             data-type="{{ $file['type'] }}"
                         >
-                            .{{ $file['type'] }}
+                        .{{ $file['type'] }}
+                        @if($file['package'])
+                                <span class="absolute  text-xs text-gray-500 bg-gray-200 rounded-full px-2 py-1 top-2 right-2">Package</span>
+                        @endif
                         </button>
                     @endforeach
                 </div>
