@@ -36,9 +36,13 @@
             const blob = await response.blob();
             const downloadUrl = URL.createObjectURL(blob);
             
+            
             const a = document.createElement('a');
             a.href = downloadUrl;
             a.download = filename;
+            if(file['package']){
+                a.download = filename + '.zip';
+            }
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
