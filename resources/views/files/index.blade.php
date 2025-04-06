@@ -20,8 +20,11 @@
                             class="download-button text-sm px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-gray-700 text-center transition-colors"
                             data-url="{{ $file['url'] }}"
                             data-type="{{ $file['type'] }}"
+                            
                         >
-                        
+                            @if($file['package'])
+                                <span class="text-xs text-gray-500">Package</span>
+                            @endif
                             {{ Str::upper($file['type']) }}
                         </button>
                     @endforeach
@@ -31,28 +34,46 @@
     </div>
 
     <script>
-        async function downloadFile(url, filename) {
-            const response = await fetch(url);
-            const blob = await response.blob();
-            const downloadUrl = URL.createObjectURL(blob);
-            
-            
-            const a = document.createElement('a');
-            a.href = downloadUrl;
-            a.download = filename;
-            if(file['package']){
-                a.download = filename + '.zip';
+        async function downloadFile(url, filename, isPackage) {
+            try {
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                alert(url)
+                const blob = await response.blob();
+                
+                // For packages/zip files, create a new blob with the correct mime type
+                const fileBlob = isPackage ? 
+                    new Blob([blob], { type: 'application/zip' }) : 
+                    blob;
+                
+                const downloadUrl = URL.createObjectURL(fileBlob);
+                
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = filename + (isPackage ? '.zip' : '');
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                
+                // Cleanup
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(downloadUrl);
+                }, 100);
+            } catch (error) {
+                console.error('Download error:', error);
+                throw error;
             }
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(downloadUrl);
         }
 
         document.querySelectorAll('.download-button').forEach(button => {
             button.addEventListener('click', async () => {
                 const url = button.dataset.url;
                 const type = button.dataset.type;
+                const isPackage = button.querySelector('span.text-xs.text-gray-500') !== null;
                 const originalText = button.textContent;
                 
                 button.disabled = true;
@@ -60,7 +81,7 @@
                 button.classList.add('opacity-50', 'cursor-not-allowed');
 
                 try {
-                    await downloadFile(url, `file.${type}`);
+                    await downloadFile(url, `file.${type}`, isPackage);
                 } catch (error) {
                     console.error('Download failed:', error);
                     alert(`Failed to download file: ${error.message}`);

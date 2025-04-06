@@ -3,7 +3,6 @@ namespace App\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
 
 class FileService {
     /**
@@ -12,11 +11,11 @@ class FileService {
      * @return array
      */
     public function getAllFiles(): array {
-        if (config('cache.cache_enabled')) {
-            return Cache::remember('cdn_files', now()->addHours(1), function () {
-                return $this->fetchFilesFromCDN('/files/files.json');
-            });
-        }
+        // if (config('cache.cache_enabled')) {
+        //     return Cache::remember('cdn_files', now()->addHours(1), function () {
+        //         return $this->fetchFilesFromCDN('/files/files.json');
+        //     });
+        // }
 
         return $this->fetchFilesFromCDN('/files/files.json');
     }
@@ -34,10 +33,15 @@ class FileService {
         $filesData = $this->getAllFiles();
 
         return collect($filesData['files'])->map(function ($file) {
+
+            $package = $file['package'] ?? false;
+            $url     = config('app.cdn_url') . "/files/{$file['url']}" . ($package ? '.zip' : '');
+
             return [
                 'category' => $file['category'],
-                'type'     => $file['type'],
-                'url'      => config('app.cdn_url') . "/files/{$file['url']}",
+                'type' => $file['type'],
+                'url' => $url,
+                'package' => $package,
             ];
         });
     }
