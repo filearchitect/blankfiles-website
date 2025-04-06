@@ -24,7 +24,7 @@
                         >
                         <span class="file-label">.{{ $file['type'] }}</span>
                         @if($file['package'])
-                                <span class="package-badge absolute text-xs text-gray-500 bg-gray-200 rounded-full px-2 py-1 top-2 right-2">Package</span>
+                                <span class="package-badge absolute text-xs text-gray-500 bg-gray-200 rounded-full px-2 py-1 top-2 right-2">zipped</span>
                         @endif
                         </button>
                     @endforeach
