@@ -1,4 +1,15 @@
 <x-guest-layout>
+    <x-slot name="title">Blank .{{ $file['type'] }} file for {{ Str::ucfirst(str_replace('-', ' ', $file['category'])) }} | Blank Files</x-slot>
+    <x-slot name="meta">
+        <meta name="description"
+            content="Download a free blank .{{ $file['type'] }} file{{ $file['package'] ? ' (zip package)' : '' }} for {{ Str::ucfirst(str_replace('-', ' ', $file['category'])) }}.">
+        <link rel="canonical" href="{{ url()->current() }}" />
+        <meta property="og:title" content="Blank .{{ $file['type'] }} file for {{ Str::ucfirst(str_replace('-', ' ', $file['category'])) }}">
+        <meta property="og:description" content="Get a clean, ready-to-use blank .{{ $file['type'] }} file.">
+        <meta property="og:type" content="article">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta name="twitter:card" content="summary">
+    </x-slot>
     <div class="mx-auto px-4 lg:px-8">
         <nav class="mb-8 border-b border-gray-200 pb-8 pt-4 text-sm text-gray-500" aria-label="Breadcrumb">
             <ol class="list-reset flex">
@@ -23,7 +34,7 @@
                     <a href="{{ $file['url'] }}"
                         class="inline-flex items-center rounded bg-gray-900 px-5 py-3 font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
                         rel="nofollow noopener">
-                        Download .{{ $file['type'] }}{{ $file['package'] ? ' (zip)' : '' }}
+                        Download <span class="ml-1 font-bold">blank.{{ $file['type'] }}{{ $file['package'] ? ' (zip)' : '' }}</span>
                     </a>
                 </div>
             </div>

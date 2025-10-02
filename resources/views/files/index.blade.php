@@ -1,4 +1,14 @@
 <x-guest-layout>
+    <x-slot name="title">Blank Files — Free blank files by type and category</x-slot>
+    <x-slot name="meta">
+        <meta name="description" content="Download free blank files across many types and categories. Fast, direct downloads and SEO-friendly detail pages.">
+        <link rel="canonical" href="{{ url()->current() }}" />
+        <meta property="og:title" content="Blank Files — Free blank files by type and category">
+        <meta property="og:description" content="Download free blank files across many types and categories.">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta name="twitter:card" content="summary">
+    </x-slot>
 
     <div class="px-4 py-6 sm:px-6 lg:px-8">
         @php
