@@ -1,9 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FileController::class, 'index'])->middleware(['throttle:30,1'])->name('home');
+
+// SEO-friendly file detail route
+Route::get('/files/{category}/{type}', [FileController::class, 'show'])
+    ->where(['category' => '[A-Za-z0-9\-]+', 'type' => '[A-Za-z0-9\-]+'])
+    ->name('files.show');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

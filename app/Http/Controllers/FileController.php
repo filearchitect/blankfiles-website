@@ -1,8 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\FileService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class FileController extends Controller {
     protected FileService $fileService;
@@ -22,6 +23,24 @@ class FileController extends Controller {
         }
 
         return view('files.index', ['files' => $files]);
+    }
+
+    /**
+     * Display a single file details page.
+     */
+    public function show(string $category, string $type) {
+        $files = $this->fileService->getFormattedFiles();
+
+        $file = $files->first(function ($item) use ($category, $type) {
+            return ($item['category'] === $category) && ($item['type'] === $type);
+        });
+
+        abort_unless($file, 404);
+
+        return view('files.show', [
+            'file' => $file,
+            'title' => Str::upper("{$type} blank files for {$category}"),
+        ]);
     }
 
 }
