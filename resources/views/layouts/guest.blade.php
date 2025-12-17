@@ -45,6 +45,10 @@
                     <div class="text-gray-600">
                         © {{ date('Y') }} Blank Files. All rights reserved.
                     </div>
+                    <div class="text-gray-600">
+                        Created by <a href="https://filearchitect.com" class="underline hover:text-gray-700" target="_blank" rel="noopener noreferrer">File
+                            Architect</a>
+                    </div>
                 </div>
             </div>
         </footer>
