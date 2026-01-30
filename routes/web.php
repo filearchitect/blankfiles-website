@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FileController::class, 'index'])->middleware(['throttle:30,1'])->name('home');
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/api-docs', [PageController::class, 'apiDocs'])->name('api-docs');
 
 // Same-origin download proxy (must be before /files/{category}/{type} so "download" isn't matched as category)
 Route::get('/files/download/{category}/{type}', [FileController::class, 'download'])
