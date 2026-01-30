@@ -21,7 +21,8 @@ class FileService {
     }
 
     public function fetchFilesFromCDN(string $path = '/files/files.json') {
-        return Http::get(config('app.cdn_url') . $path)->json();
+        $baseUrl = rtrim(config('app.cdn_url'), '/');
+        return Http::get($baseUrl . $path)->json();
     }
 
     /**
@@ -32,10 +33,12 @@ class FileService {
     public function getFormattedFiles(): Collection {
         $filesData = $this->getAllFiles();
 
-        return collect($filesData['files'])->map(function ($file) {
+        $baseUrl = rtrim(config('app.cdn_url'), '/');
+
+        return collect($filesData['files'])->map(function ($file) use ($baseUrl) {
 
             $package = $file['package'] ?? false;
-            $url     = config('app.cdn_url') . "/files/{$file['url']}" . ($package ? '.zip' : '');
+            $url     = $baseUrl . "/files/{$file['url']}" . ($package ? '.zip' : '');
 
             return [
                 'category' => $file['category'],
