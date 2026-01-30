@@ -29,21 +29,21 @@ Or use [Laravel Herd](https://herd.laravel.com) with a `.test` domain.
 
 ## Configuration
 
-| Variable | Description |
-|----------|-------------|
-| `CDN_URL` | **Required.** Base URL where the file catalog and assets are served. The app expects `{CDN_URL}/files/files.json` for the catalog and `{CDN_URL}/files/{filename}` for each file. Examples: `https://cdn.statically.io/gh/filearchitect/blank-files/main`, `https://raw.githubusercontent.com/filearchitect/blank-files/main` (note: raw GitHub has rate limits). Default in [config/app.php](config/app.php) is Statically CDN. |
-| `CACHE_ENABLED` | Optional. When `true`, the file list from the CDN is cached for 1 hour. See [config/cache.php](config/cache.php) and [app/Services/FileService.php](app/Services/FileService.php). |
+| Variable        | Description                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CDN_URL`       | **Required.** Base URL where the file catalog and assets are served. The app expects `{CDN_URL}/files/files.json` for the catalog and `{CDN_URL}/files/{filename}` for each file. Examples: `https://cdn.statically.io/gh/filearchitect/blank-files/main`, `https://raw.githubusercontent.com/filearchitect/blank-files/main` (note: raw GitHub has rate limits). Default in [config/app.php](config/app.php) is Statically CDN. |
+| `CACHE_ENABLED` | Optional. When `true`, the file list from the CDN is cached for 1 hour. See [config/cache.php](config/cache.php) and [app/Services/FileService.php](app/Services/FileService.php).                                                                                                                                                                                                                                               |
 
 ## Project structure
 
-| Path | Purpose |
-|------|---------|
-| `app/Http/Controllers/FileController.php` | Web: homepage, file detail page, download proxy. |
-| `app/Http/Controllers/Api/FileController.php` | API: list all files, list files by type. |
-| `app/Services/FileService.php` | Fetches and formats file list from CDN (`files/files.json`). |
-| `routes/web.php` | Web routes (home, files show, download). |
-| `routes/api.php` | API v1 routes. |
-| `resources/views/files/` | Blade views for file listing and file detail. |
+| Path                                          | Purpose                                                      |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| `app/Http/Controllers/FileController.php`     | Web: homepage, file detail page, download proxy.             |
+| `app/Http/Controllers/Api/FileController.php` | API: list all files, list files by type.                     |
+| `app/Services/FileService.php`                | Fetches and formats file list from CDN (`files/files.json`). |
+| `routes/web.php`                              | Web routes (home, files show, download).                     |
+| `routes/api.php`                              | API v1 routes.                                               |
+| `resources/views/files/`                      | Blade views for file listing and file detail.                |
 
 ## Deployment
 
@@ -75,18 +75,18 @@ Production: `https://blankfiles.com`. HTML and JSON are available; use `Accept: 
 
 ### Web routes
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/` | Homepage: file list by category. Responds with JSON when `Accept: application/json`. Throttle: 30/min. |
-| `GET` | `/files/{category}/{type}` | SEO-friendly file detail page (e.g. `/files/document-spreadsheet/xlsx`). Constraints: `category`, `type` = `[A-Za-z0-9\-]+`. |
-| `GET` | `/files/download/{category}/{type}` | Download proxy: streams the file with `Content-Disposition: attachment` (filename `blank.{type}` or `blank.{type}.zip`). Throttle: 60/min. |
+| Method | Path                                | Description                                                                                                                                |
+| ------ | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GET`  | `/`                                 | Homepage: file list by category. Responds with JSON when `Accept: application/json`. Throttle: 30/min.                                     |
+| `GET`  | `/files/{category}/{type}`          | SEO-friendly file detail page (e.g. `/files/document-spreadsheet/xlsx`). Constraints: `category`, `type` = `[A-Za-z0-9\-]+`.               |
+| `GET`  | `/files/download/{category}/{type}` | Download proxy: streams the file with `Content-Disposition: attachment` (filename `blank.{type}` or `blank.{type}.zip`). Throttle: 60/min. |
 
 ### API routes (prefix `api/v1`, throttle 30/min)
 
-| Method | Path | Response |
-|--------|------|----------|
-| `GET` | `/api/v1/files` | `{ "files": [ { "category", "type", "url", "package" } ] }`. `url` is the full CDN URL for the file; `package` is boolean (true when file is served as `.zip`). |
-| `GET` | `/api/v1/files/{type}` | `{ "files": [ ... ] }` — entries for the given type. |
+| Method | Path                   | Response                                                                                                                                                        |
+| ------ | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET`  | `/api/v1/files`        | `{ "files": [ { "category", "type", "url", "package" } ] }`. `url` is the full CDN URL for the file; `package` is boolean (true when file is served as `.zip`). |
+| `GET`  | `/api/v1/files/{type}` | `{ "files": [ ... ] }` — entries for the given type.                                                                                                            |
 
 ### Machine-friendly notes
 
@@ -98,10 +98,6 @@ Production: `https://blankfiles.com`. HTML and JSON are available; use `Accept: 
 ## Related
 
 - [filearchitect/blank-files](https://github.com/filearchitect/blank-files) — Source of truth for the file list and blank file assets.
-
-## Support
-
-If you need assistance or want to report an issue, please contact us at support@your-domain.com.
 
 ## License
 
