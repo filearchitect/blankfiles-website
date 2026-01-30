@@ -33,11 +33,12 @@
                                 <span class="package-badge absolute right-2 top-2 rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-500">zipped</span>
                             @endif
 
-                            <button type="button"
+                            <a href="{{ route('files.download', ['category' => $file['category'], 'type' => $file['type']]) }}"
+                                target="_blank" rel="noopener noreferrer"
+                                onclick="event.stopPropagation()"
                                 class="pointer-events-none absolute bottom-2 right-2 inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-900 opacity-0 transition-opacity hover:bg-gray-50 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-gray-400 group-hover:pointer-events-auto group-hover:opacity-100"
                                 title="Download .{{ $file['type'] }}{{ $file['package'] ? ' (zip)' : '' }}"
-                                aria-label="Download .{{ $file['type'] }}{{ $file['package'] ? ' (zip)' : '' }}" onclick="event.stopPropagation(); quickDownload(this);"
-                                data-url="{{ $file['url'] }}" data-type="{{ $file['type'] }}" data-package="{{ $file['package'] ? 'true' : 'false' }}">
+                                aria-label="Download .{{ $file['type'] }}{{ $file['package'] ? ' (zip)' : '' }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" class="h-4 w-4">
                                     <title>download-solid</title>
                                     <g fill="#212121">
@@ -46,51 +47,12 @@
                                         </path>
                                     </g>
                                 </svg>
-                            </button>
+                            </a>
                         </div>
                     @endforeach
                 </div>
             </div>
         @endforeach
     </div>
-
-    <script>
-        async function quickDownload(buttonEl) {
-            const url = buttonEl.dataset.url;
-            const fileType = buttonEl.dataset.type;
-            const isPackage = buttonEl.dataset.package === 'true';
-            const originalHtml = buttonEl.innerHTML;
-
-            try {
-                buttonEl.disabled = true;
-                buttonEl.innerHTML =
-                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="4" opacity="0.25"/><path d="M4 12a8 8 0 0 1 8-8" stroke-width="4" opacity="0.75"/></svg>';
-
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const blob = await response.blob();
-                const fileBlob = isPackage ? new Blob([blob], {
-                    type: 'application/zip'
-                }) : blob;
-
-                const downloadUrl = URL.createObjectURL(fileBlob);
-                const link = document.createElement('a');
-                link.href = downloadUrl;
-                link.download = `blank.${fileType}${isPackage ? '.zip' : ''}`;
-                document.body.appendChild(link);
-                link.click();
-                setTimeout(() => {
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(downloadUrl);
-                }, 100);
-            } catch (e) {
-                console.error('Quick download failed:', e);
-                alert('Download failed. Please try again.');
-            } finally {
-                buttonEl.disabled = false;
-                buttonEl.innerHTML = originalHtml;
-            }
-        }
-    </script>
 
 </x-guest-layout>

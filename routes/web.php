@@ -5,6 +5,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FileController::class, 'index'])->middleware(['throttle:30,1'])->name('home');
 
+// Same-origin download proxy (must be before /files/{category}/{type} so "download" isn't matched as category)
+Route::get('/files/download/{category}/{type}', [FileController::class, 'download'])
+    ->middleware(['throttle:60,1'])
+    ->where(['category' => '[A-Za-z0-9\-]+', 'type' => '[A-Za-z0-9\-]+'])
+    ->name('files.download');
+
 // SEO-friendly file detail route
 Route::get('/files/{category}/{type}', [FileController::class, 'show'])
     ->where(['category' => '[A-Za-z0-9\-]+', 'type' => '[A-Za-z0-9\-]+'])

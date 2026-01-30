@@ -31,7 +31,8 @@
                     {{ Str::ucfirst(str_replace('-', ' ', $file['category'])) }}.
                 </p>
                 <div class="mt-8">
-                    <a href="{{ $file['url'] }}"
+                    <a href="{{ route('files.download', ['category' => $file['category'], 'type' => $file['type']]) }}"
+                        download="blank.{{ $file['type'] }}{{ $file['package'] ? '.zip' : '' }}"
                         class="inline-flex items-center rounded bg-gray-900 px-5 py-3 font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400"
                         rel="nofollow noopener">
                         Download <span class="ml-1 font-bold">blank.{{ $file['type'] }}{{ $file['package'] ? ' (zip)' : '' }}</span>
