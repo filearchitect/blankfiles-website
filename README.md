@@ -131,6 +131,11 @@ Example local MCP client config entry:
 }
 ```
 
+Registry submission helpers:
+
+- Template metadata: `scripts/mcp/registry/server.json.template`
+- Publish checklist: `scripts/mcp/registry/PUBLISHING.md`
+
 ## License
 
 This project is licensed under the MIT License.
