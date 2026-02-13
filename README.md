@@ -33,6 +33,10 @@ Or use [Laravel Herd](https://herd.laravel.com) with a `.test` domain.
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CDN_URL`       | **Required.** Base URL where the file catalog and assets are served. The app expects `{CDN_URL}/files/files.json` for the catalog and `{CDN_URL}/files/{filename}` for each file. Examples: `https://cdn.statically.io/gh/filearchitect/blank-files/main`, `https://raw.githubusercontent.com/filearchitect/blank-files/main` (note: raw GitHub has rate limits). Default in [config/app.php](config/app.php) is Statically CDN. |
 | `CACHE_ENABLED` | Optional. When `true`, the file list from the CDN is cached for 1 hour. See [config/cache.php](config/cache.php) and [app/Services/FileService.php](app/Services/FileService.php).                                                                                                                                                                                                                                               |
+| `API_KEYS` | Optional. Comma-separated API keys for higher-rate API clients (used by `X-API-Key` or `Authorization: Bearer ...`). |
+| `API_PUBLIC_RATE_LIMIT` | Optional. Public API requests/minute limit (default `30`). |
+| `API_KEY_RATE_LIMIT` | Optional. API-key requests/minute limit (default `300`). |
+| `API_USAGE_LOG_CHANNEL` | Optional. Logging channel for API usage analytics (default `api_usage`). |
 
 ## Project structure
 
@@ -81,19 +85,54 @@ Production: `https://blankfiles.com`. HTML and JSON are available; use `Accept: 
 | `GET`  | `/files/{category}/{type}`          | SEO-friendly file detail page (e.g. `/files/document-spreadsheet/xlsx`). Constraints: `category`, `type` = `[A-Za-z0-9\-]+`.               |
 | `GET`  | `/files/download/{category}/{type}` | Download proxy: streams the file with `Content-Disposition: attachment` (filename `blank.{type}` or `blank.{type}.zip`). Throttle: 60/min. |
 
-### API routes (prefix `api/v1`, throttle 30/min)
+### API routes (prefix `api/v1`)
 
 | Method | Path                   | Response                                                                                                                                                        |
 | ------ | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GET`  | `/api/v1/files`        | `{ "files": [ ... ], "meta": { "version", "generated_at", "count" } }`.                                                                                         |
 | `GET`  | `/api/v1/files/{type}` | Same schema, filtered by extension.                                                                                                                              |
 | `GET`  | `/api/v1/files/{category}/{type}` | Same schema with exactly one matching entry when found; `404` when missing.                                                                                   |
+| `GET`  | `/api/v1/status` | API health + aggregate catalog metrics (`file_count`, `type_count`, `category_count`) and upstream source info. |
 
 ### Machine-friendly notes
 
 - The canonical file catalog schema is defined in the [blank-files](https://github.com/filearchitect/blank-files) repo: `files/files.json` (key `files`, array of `{ type, url, category, package? }`).
 - Download URLs: use the API `url` field for direct CDN access, or `GET /files/download/{category}/{type}` for a same-origin download with a predictable filename.
 - Conditional requests are supported on API responses and sitemap (`ETag`, `Last-Modified`).
+- Rate limits: public IP-based limits and optional API-key limits (`X-API-Key`).
+- API usage analytics are logged to `storage/logs/api-usage-*.log` (configurable channel).
+- Compatibility policy: [API policy](https://blankfiles.com/api-policy).
+
+### Client snippets
+
+```bash
+curl -sS "https://blankfiles.com/api/v1/files/document-spreadsheet/xlsx" \
+  -H "Accept: application/json" \
+  -H "X-API-Key: $BLANKFILES_API_KEY"
+```
+
+```js
+const res = await fetch("https://blankfiles.com/api/v1/files", {
+  headers: { "Accept": "application/json", "If-None-Match": etag }
+});
+if (res.status === 304) {
+  // unchanged
+}
+```
+
+```python
+import requests
+r = requests.get("https://blankfiles.com/api/v1/status", timeout=20)
+r.raise_for_status()
+print(r.json())
+```
+
+### Compatibility policy
+
+- URL versioning is stable under `/api/v1/*`.
+- Breaking changes require a new major API path version.
+- Deprecated endpoints are kept for at least 90 days before removal.
+- New fields may be added; clients should ignore unknown fields.
 
 ---
 
@@ -135,6 +174,10 @@ Registry submission helpers:
 
 - Template metadata: `scripts/mcp/registry/server.json.template`
 - Publish checklist: `scripts/mcp/registry/PUBLISHING.md`
+
+Published package workspace:
+
+- `packages/blankfiles-mcp` (publish as `@filearchitect/blankfiles-mcp`)
 
 ## License
 

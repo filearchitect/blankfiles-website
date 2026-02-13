@@ -17,6 +17,17 @@ The registry entry in `server.json.template` expects:
 - package version: `1.0.0`
 - stdio entrypoint that starts the MCP server
 
+This repo includes a publishable package at:
+
+- `packages/blankfiles-mcp`
+
+Publish command example:
+
+```bash
+cd packages/blankfiles-mcp
+npm publish --access public
+```
+
 The published package `package.json` should include:
 
 ```json

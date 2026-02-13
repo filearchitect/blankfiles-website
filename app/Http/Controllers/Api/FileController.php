@@ -55,19 +55,44 @@ class FileController extends Controller {
         return $this->respondWithFiles($request, collect([$file]));
     }
 
+    /**
+     * API operational status and catalog stats.
+     */
+    public function status(Request $request): JsonResponse {
+        $files = $this->fileService->getFormattedFiles();
+        $lastModified = Carbon::now('UTC')->startOfMinute();
+
+        return $this->respondJsonCached($request, [
+            'status' => 'ok',
+            'service' => 'blankfiles-api',
+            'version' => 'v1',
+            'generated_at' => $lastModified->copy()->toIso8601String(),
+            'catalog' => [
+                'source_repository' => 'https://github.com/filearchitect/blank-files',
+                'cdn_url' => rtrim((string) config('app.cdn_url'), '/'),
+                'file_count' => $files->count(),
+                'type_count' => $files->pluck('type')->unique()->count(),
+                'category_count' => $files->pluck('category')->unique()->count(),
+            ],
+        ], $lastModified);
+    }
+
     private function respondWithFiles(Request $request, Collection $files): JsonResponse {
         $files = $files->values();
         $lastModified = Carbon::now('UTC')->startOfHour();
-        $etag = '"' . hash('sha256', json_encode($files->all())) . '"';
-
-        $response = response()->json([
+        return $this->respondJsonCached($request, [
             'files' => $files,
             'meta' => [
                 'version' => 'v1',
                 'generated_at' => $lastModified->copy()->toIso8601String(),
                 'count' => $files->count(),
             ],
-        ]);
+        ], $lastModified);
+    }
+
+    private function respondJsonCached(Request $request, array $payload, Carbon $lastModified): JsonResponse {
+        $etag = '"' . hash('sha256', json_encode($payload)) . '"';
+        $response = response()->json($payload);
 
         $response->setEtag($etag);
         $response->setLastModified($lastModified);

@@ -70,3 +70,27 @@ test('sitemap supports conditional get with etag', function () {
     $second = $this->withHeaders(['If-None-Match' => $etag])->get('/sitemap.xml');
     $second->assertStatus(304);
 });
+
+test('api status returns catalog metadata with cache validators', function () {
+    $response = $this->getJson('/api/v1/status');
+
+    $response->assertOk();
+    $response->assertJsonStructure([
+        'status',
+        'service',
+        'version',
+        'generated_at',
+        'catalog' => [
+            'source_repository',
+            'cdn_url',
+            'file_count',
+            'type_count',
+            'category_count',
+        ],
+    ]);
+    $response->assertJsonPath('status', 'ok');
+    $response->assertJsonPath('catalog.source_repository', 'https://github.com/filearchitect/blank-files');
+
+    expect($response->headers->get('ETag'))->not->toBeNull();
+    expect($response->headers->get('Last-Modified'))->not->toBeNull();
+});

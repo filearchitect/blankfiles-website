@@ -19,6 +19,10 @@
             <p class="mt-4 text-lg text-gray-600">
                 Use the Blank Files API to list and download blank files programmatically. All endpoints return JSON unless noted. Throttling applies to avoid abuse.
             </p>
+            <p class="mt-2 text-gray-600">
+                See the <a href="{{ route('api-policy') }}" class="font-medium text-gray-900 underline hover:no-underline">API compatibility policy</a> for guarantees,
+                deprecations, and versioning.
+            </p>
 
             <h2 class="mt-8 text-xl font-semibold text-gray-800">Base URL</h2>
             <p class="mt-2 text-gray-600">
@@ -32,7 +36,8 @@
                 <li><code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">{{ route('sitemap') }}</code> (crawlable URL index)</li>
             </ul>
             <h2 class="mt-8 text-xl font-semibold text-gray-800">API routes</h2>
-            <p class="mt-2 text-gray-600">Prefix: <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">/api/v1</code>. Throttle: 30 requests per minute per client.</p>
+            <p class="mt-2 text-gray-600">Prefix: <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">/api/v1</code>. Public throttle: 30 requests/minute per client IP.
+                Optional <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">X-API-Key</code> may receive a higher rate limit.</p>
             <p class="mt-2 text-gray-600">Responses include <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">meta.version</code>, <code
                     class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">meta.generated_at</code>, and <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">meta.count</code>.
                 Conditional requests are supported via <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">ETag</code> and <code
@@ -84,6 +89,71 @@
   ],
   "meta": { "version": "v1", "generated_at": "2026-02-13T15:00:00Z", "count": 1 }
 }</code></pre>
+            </section>
+
+            <section class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <h3 class="text-lg font-medium text-gray-900">GET /api/v1/status</h3>
+                <p class="mt-2 text-gray-600">Operational API status and aggregate catalog metrics.</p>
+                <p class="mt-2 text-sm font-medium text-gray-700">Response</p>
+                <pre class="mt-1 overflow-x-auto rounded bg-gray-900 p-4 text-sm text-gray-100"><code>{
+  "status": "ok",
+  "service": "blankfiles-api",
+  "version": "v1",
+  "generated_at": "2026-02-13T15:00:00Z",
+  "catalog": {
+    "source_repository": "https://github.com/filearchitect/blank-files",
+    "cdn_url": "https://cdn.statically.io/gh/filearchitect/blank-files/main",
+    "file_count": 300,
+    "type_count": 120,
+    "category_count": 15
+  }
+}</code></pre>
+            </section>
+
+            <h2 class="mt-8 text-xl font-semibold text-gray-800">Client snippets</h2>
+            <p class="mt-2 text-gray-600">Use these examples as starting points for SDK integrations and agent actions.</p>
+
+            <section class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <h3 class="text-lg font-medium text-gray-900">cURL</h3>
+                <pre class="mt-1 overflow-x-auto rounded bg-gray-900 p-4 text-sm text-gray-100"><code>curl -sS "{{ url('/api/v1/files/document-spreadsheet/xlsx') }}" \
+  -H "Accept: application/json" \
+  -H "X-API-Key: $BLANKFILES_API_KEY"</code></pre>
+            </section>
+
+            <section class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <h3 class="text-lg font-medium text-gray-900">JavaScript (fetch + conditional GET)</h3>
+                <pre class="mt-1 overflow-x-auto rounded bg-gray-900 p-4 text-sm text-gray-100"><code>const base = "{{ url('/api/v1/files') }}";
+let etag = "";
+
+async function fetchFiles() {
+  const res = await fetch(base, {
+    headers: {
+      "Accept": "application/json",
+      "X-API-Key": process.env.BLANKFILES_API_KEY || "",
+      ...(etag ? { "If-None-Match": etag } : {}),
+    },
+  });
+
+  if (res.status === 304) return { notModified: true };
+
+  etag = res.headers.get("etag") || "";
+  return res.json();
+}</code></pre>
+            </section>
+
+            <section class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <h3 class="text-lg font-medium text-gray-900">Python (requests)</h3>
+                <pre class="mt-1 overflow-x-auto rounded bg-gray-900 p-4 text-sm text-gray-100"><code>import os
+import requests
+
+url = "{{ url('/api/v1/files/document-spreadsheet/xlsx') }}"
+headers = {
+    "Accept": "application/json",
+    "X-API-Key": os.getenv("BLANKFILES_API_KEY", "")
+}
+response = requests.get(url, headers=headers, timeout=20)
+response.raise_for_status()
+print(response.json())</code></pre>
             </section>
 
             <h2 class="mt-8 text-xl font-semibold text-gray-800">Catalog schema</h2>

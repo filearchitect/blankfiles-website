@@ -1,0 +1,28 @@
+{
+  "name": "@filearchitect/blankfiles-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for blankfiles.com API",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/filearchitect/blankfiles-website.git",
+    "directory": "packages/blankfiles-mcp"
+  },
+  "bin": {
+    "blankfiles-mcp": "./blankfiles-mcp.mjs"
+  },
+  "keywords": [
+    "mcp",
+    "blank-files",
+    "ai-agents",
+    "tools"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "zod": "^4.1.5"
+  }
+}

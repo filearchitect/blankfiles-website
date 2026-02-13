@@ -21,6 +21,11 @@ class PageController extends Controller
         return view('pages.api-docs');
     }
 
+    public function apiPolicy()
+    {
+        return view('pages.api-policy');
+    }
+
     public function llms(): Response
     {
         $lines = [
@@ -30,8 +35,10 @@ class PageController extends Controller
             '',
             'Key resources:',
             '- API docs: ' . route('api-docs'),
+            '- API compatibility policy: ' . route('api-policy'),
             '- OpenAPI schema: ' . route('openapi'),
             '- API files endpoint: ' . url('/api/v1/files'),
+            '- API status endpoint: ' . url('/api/v1/status'),
             '- Full agent guide: ' . route('llms-full'),
             '',
             'Primary machine endpoints:',
@@ -57,6 +64,7 @@ class PageController extends Controller
             '',
             'Documentation',
             '- API docs: ' . route('api-docs'),
+            '- API compatibility policy: ' . route('api-policy'),
             '- OpenAPI schema: ' . route('openapi'),
             '- Source catalog repo: https://github.com/filearchitect/blank-files',
             '',
@@ -67,6 +75,8 @@ class PageController extends Controller
             '  Returns the same schema filtered by file extension (example: `pdf`, `xlsx`).',
             '- GET /api/v1/files/{category}/{type}',
             '  Returns a deterministic single-file match.',
+            '- GET /api/v1/status',
+            '  Returns service health and catalog stats.',
             '- GET /files/{category}/{type}',
             '  Human page for a specific file type.',
             '- GET /files/download/{category}/{type}',
@@ -83,6 +93,7 @@ class PageController extends Controller
             '',
             'Operational notes',
             '- API routes are throttled at 30 requests/min/client.',
+            '- Valid API keys can receive a higher limit (default 300/min via `X-API-Key`).',
             '- Download route is throttled at 60 requests/min/client.',
             '- Prefer API URLs for automation and stable parsing.',
             '- API supports conditional requests (`ETag`, `Last-Modified`).',
@@ -117,6 +128,7 @@ class PageController extends Controller
                 '/api/v1/files' => [
                     'get' => [
                         'summary' => 'List all blank files',
+                        'description' => 'Optional API key in `X-API-Key` may receive higher rate limits.',
                         'responses' => [
                             '200' => [
                                 'description' => 'List of files',
@@ -134,6 +146,7 @@ class PageController extends Controller
                 '/api/v1/files/{type}' => [
                     'get' => [
                         'summary' => 'List files by extension',
+                        'description' => 'Optional API key in `X-API-Key` may receive higher rate limits.',
                         'parameters' => [
                             [
                                 'name' => 'type',
@@ -160,6 +173,7 @@ class PageController extends Controller
                 '/api/v1/files/{category}/{type}' => [
                     'get' => [
                         'summary' => 'Get a single file by category and extension',
+                        'description' => 'Optional API key in `X-API-Key` may receive higher rate limits.',
                         'parameters' => [
                             [
                                 'name' => 'category',
@@ -189,6 +203,24 @@ class PageController extends Controller
                             ],
                             '404' => [
                                 'description' => 'File not found',
+                            ],
+                        ],
+                    ],
+                ],
+                '/api/v1/status' => [
+                    'get' => [
+                        'summary' => 'Get API status and catalog metrics',
+                        'description' => 'Returns operational status and aggregate counts from the blank files catalog.',
+                        'responses' => [
+                            '200' => [
+                                'description' => 'API status',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            '$ref' => '#/components/schemas/StatusResponse',
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -230,6 +262,27 @@ class PageController extends Controller
                             'count' => ['type' => 'integer', 'example' => 1],
                         ],
                     ],
+                    'StatusResponse' => [
+                        'type' => 'object',
+                        'required' => ['status', 'service', 'version', 'generated_at', 'catalog'],
+                        'properties' => [
+                            'status' => ['type' => 'string', 'example' => 'ok'],
+                            'service' => ['type' => 'string', 'example' => 'blankfiles-api'],
+                            'version' => ['type' => 'string', 'example' => 'v1'],
+                            'generated_at' => ['type' => 'string', 'format' => 'date-time'],
+                            'catalog' => [
+                                'type' => 'object',
+                                'required' => ['source_repository', 'cdn_url', 'file_count', 'type_count', 'category_count'],
+                                'properties' => [
+                                    'source_repository' => ['type' => 'string', 'format' => 'uri'],
+                                    'cdn_url' => ['type' => 'string', 'format' => 'uri'],
+                                    'file_count' => ['type' => 'integer', 'example' => 300],
+                                    'type_count' => ['type' => 'integer', 'example' => 120],
+                                    'category_count' => ['type' => 'integer', 'example' => 15],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];
@@ -246,10 +299,12 @@ class PageController extends Controller
             ['loc' => route('home'), 'lastmod' => $today, 'priority' => '1.0'],
             ['loc' => route('about'), 'lastmod' => $today, 'priority' => '0.7'],
             ['loc' => route('api-docs'), 'lastmod' => $today, 'priority' => '0.8'],
+            ['loc' => route('api-policy'), 'lastmod' => $today, 'priority' => '0.8'],
             ['loc' => route('llms'), 'lastmod' => $today, 'priority' => '0.9'],
             ['loc' => route('llms-full'), 'lastmod' => $today, 'priority' => '0.9'],
             ['loc' => route('openapi'), 'lastmod' => $today, 'priority' => '0.9'],
             ['loc' => url('/api/v1/files'), 'lastmod' => $today, 'priority' => '0.9'],
+            ['loc' => url('/api/v1/status'), 'lastmod' => $today, 'priority' => '0.9'],
         ];
 
         foreach ($files->pluck('type')->unique() as $type) {

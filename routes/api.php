@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\FileController;
+use App\Http\Middleware\TrackApiUsage;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +15,11 @@ use App\Http\Controllers\Api\FileController;
 |
 */
 Route::prefix('v1')->group(function () {
-    Route::prefix('files')->middleware(['throttle:30,1'])->group(function () {
+    Route::middleware(['throttle:files-api', TrackApiUsage::class])->group(function () {
+        Route::get('/status', [FileController::class, 'status']);
+    });
+
+    Route::prefix('files')->middleware(['throttle:files-api', TrackApiUsage::class])->group(function () {
         Route::get('/', [FileController::class, 'index']);
         Route::get('{category}/{type}', [FileController::class, 'show'])
             ->where(['category' => '[A-Za-z0-9\-]+', 'type' => '[A-Za-z0-9\-]+']);
