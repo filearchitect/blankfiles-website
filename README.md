@@ -85,13 +85,15 @@ Production: `https://blankfiles.com`. HTML and JSON are available; use `Accept: 
 
 | Method | Path                   | Response                                                                                                                                                        |
 | ------ | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET`  | `/api/v1/files`        | `{ "files": [ { "category", "type", "url", "package" } ] }`. `url` is the full CDN URL for the file; `package` is boolean (true when file is served as `.zip`). |
-| `GET`  | `/api/v1/files/{type}` | `{ "files": [ ... ] }` — entries for the given type.                                                                                                            |
+| `GET`  | `/api/v1/files`        | `{ "files": [ ... ], "meta": { "version", "generated_at", "count" } }`.                                                                                         |
+| `GET`  | `/api/v1/files/{type}` | Same schema, filtered by extension.                                                                                                                              |
+| `GET`  | `/api/v1/files/{category}/{type}` | Same schema with exactly one matching entry when found; `404` when missing.                                                                                   |
 
 ### Machine-friendly notes
 
 - The canonical file catalog schema is defined in the [blank-files](https://github.com/filearchitect/blank-files) repo: `files/files.json` (key `files`, array of `{ type, url, category, package? }`).
 - Download URLs: use the API `url` field for direct CDN access, or `GET /files/download/{category}/{type}` for a same-origin download with a predictable filename.
+- Conditional requests are supported on API responses and sitemap (`ETag`, `Last-Modified`).
 
 ---
 

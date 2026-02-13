@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\FileService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
@@ -36,6 +37,7 @@ class PageController extends Controller
             'Primary machine endpoints:',
             '- GET /api/v1/files',
             '- GET /api/v1/files/{type}',
+            '- GET /api/v1/files/{category}/{type}',
             '- GET /files/{category}/{type}',
             '- GET /files/download/{category}/{type}',
         ];
@@ -63,6 +65,8 @@ class PageController extends Controller
             '  Returns `{ "files": [{ "category", "type", "url", "package" }] }`.',
             '- GET /api/v1/files/{type}',
             '  Returns the same schema filtered by file extension (example: `pdf`, `xlsx`).',
+            '- GET /api/v1/files/{category}/{type}',
+            '  Returns a deterministic single-file match.',
             '- GET /files/{category}/{type}',
             '  Human page for a specific file type.',
             '- GET /files/download/{category}/{type}',
@@ -73,11 +77,15 @@ class PageController extends Controller
             '- `type` (string): extension without leading dot.',
             '- `url` (string): direct CDN URL to blank file.',
             '- `package` (boolean): true when distributed as zip archive.',
+            '- `meta.version` (string): API version tag.',
+            '- `meta.generated_at` (ISO8601 string): response generation timestamp (UTC, hour-granular).',
+            '- `meta.count` (integer): number of entries returned.',
             '',
             'Operational notes',
             '- API routes are throttled at 30 requests/min/client.',
             '- Download route is throttled at 60 requests/min/client.',
             '- Prefer API URLs for automation and stable parsing.',
+            '- API supports conditional requests (`ETag`, `Last-Modified`).',
             '',
             'Discovery',
             '- robots.txt: ' . url('/robots.txt'),
@@ -149,18 +157,57 @@ class PageController extends Controller
                         ],
                     ],
                 ],
+                '/api/v1/files/{category}/{type}' => [
+                    'get' => [
+                        'summary' => 'Get a single file by category and extension',
+                        'parameters' => [
+                            [
+                                'name' => 'category',
+                                'in' => 'path',
+                                'required' => true,
+                                'schema' => ['type' => 'string'],
+                                'description' => 'Category slug, for example `document-spreadsheet`.',
+                            ],
+                            [
+                                'name' => 'type',
+                                'in' => 'path',
+                                'required' => true,
+                                'schema' => ['type' => 'string'],
+                                'description' => 'File extension, for example `xlsx`.',
+                            ],
+                        ],
+                        'responses' => [
+                            '200' => [
+                                'description' => 'Single-entry list of files',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            '$ref' => '#/components/schemas/FileListResponse',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            '404' => [
+                                'description' => 'File not found',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'components' => [
                 'schemas' => [
                     'FileListResponse' => [
                         'type' => 'object',
-                        'required' => ['files'],
+                        'required' => ['files', 'meta'],
                         'properties' => [
                             'files' => [
                                 'type' => 'array',
                                 'items' => [
                                     '$ref' => '#/components/schemas/File',
                                 ],
+                            ],
+                            'meta' => [
+                                '$ref' => '#/components/schemas/Meta',
                             ],
                         ],
                     ],
@@ -174,6 +221,15 @@ class PageController extends Controller
                             'package' => ['type' => 'boolean', 'example' => false],
                         ],
                     ],
+                    'Meta' => [
+                        'type' => 'object',
+                        'required' => ['version', 'generated_at', 'count'],
+                        'properties' => [
+                            'version' => ['type' => 'string', 'example' => 'v1'],
+                            'generated_at' => ['type' => 'string', 'format' => 'date-time'],
+                            'count' => ['type' => 'integer', 'example' => 1],
+                        ],
+                    ],
                 ],
             ],
         ];
@@ -181,7 +237,7 @@ class PageController extends Controller
         return response()->json($schema);
     }
 
-    public function sitemap(FileService $fileService): Response
+    public function sitemap(Request $request, FileService $fileService): Response
     {
         $today = Carbon::now()->toDateString();
         $files = $fileService->getFormattedFiles();
@@ -213,7 +269,18 @@ class PageController extends Controller
         }
 
         $xml = view('pages.sitemap', ['urls' => $urls])->render();
+        $lastModified = Carbon::now('UTC')->startOfHour();
+        $etag = '"' . hash('sha256', $xml) . '"';
 
-        return response($xml, 200)->header('Content-Type', 'application/xml; charset=UTF-8');
+        $response = response($xml, 200)->header('Content-Type', 'application/xml; charset=UTF-8');
+        $response->setEtag($etag);
+        $response->setLastModified($lastModified);
+        $response->setPublic();
+
+        if ($response->isNotModified($request)) {
+            return $response;
+        }
+
+        return $response;
     }
 }

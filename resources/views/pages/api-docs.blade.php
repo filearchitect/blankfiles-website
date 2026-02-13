@@ -33,6 +33,10 @@
             </ul>
             <h2 class="mt-8 text-xl font-semibold text-gray-800">API routes</h2>
             <p class="mt-2 text-gray-600">Prefix: <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">/api/v1</code>. Throttle: 30 requests per minute per client.</p>
+            <p class="mt-2 text-gray-600">Responses include <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">meta.version</code>, <code
+                    class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">meta.generated_at</code>, and <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">meta.count</code>.
+                Conditional requests are supported via <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">ETag</code> and <code
+                    class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">Last-Modified</code>.</p>
 
             <section class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
                 <h3 class="text-lg font-medium text-gray-900">GET /api/v1/files</h3>
@@ -46,7 +50,12 @@
       "url": "https://…/files/blank.xlsx",
       "package": false
     }
-  ]
+  ],
+  "meta": {
+    "version": "v1",
+    "generated_at": "2026-02-13T15:00:00Z",
+    "count": 1
+  }
 }</code></pre>
                 <p class="mt-2 text-sm text-gray-600"><code class="rounded bg-gray-200 px-1 py-0.5">url</code> is the full URL to the file (CDN). <code
                         class="rounded bg-gray-200 px-1 py-0.5">package</code> is <code class="rounded bg-gray-200 px-1 py-0.5">true</code> when the file is served as a .zip.</p>
@@ -60,7 +69,20 @@
                 <pre class="mt-1 overflow-x-auto rounded bg-gray-900 p-4 text-sm text-gray-100"><code>{
   "files": [
     { "category": "document-spreadsheet", "type": "xlsx", "url": "…", "package": false }
-  ]
+  ],
+  "meta": { "version": "v1", "generated_at": "2026-02-13T15:00:00Z", "count": 1 }
+}</code></pre>
+            </section>
+
+            <section class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <h3 class="text-lg font-medium text-gray-900">GET /api/v1/files/{category}/{type}</h3>
+                <p class="mt-2 text-gray-600">Returns exactly one matching entry when the category and type exist, otherwise 404.</p>
+                <p class="mt-2 text-sm font-medium text-gray-700">Response (200)</p>
+                <pre class="mt-1 overflow-x-auto rounded bg-gray-900 p-4 text-sm text-gray-100"><code>{
+  "files": [
+    { "category": "document-spreadsheet", "type": "xlsx", "url": "…", "package": false }
+  ],
+  "meta": { "version": "v1", "generated_at": "2026-02-13T15:00:00Z", "count": 1 }
 }</code></pre>
             </section>
 
