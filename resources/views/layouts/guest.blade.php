@@ -54,11 +54,21 @@
                     <div class="text-gray-600">
                         © {{ date('Y') }} Blank Files. All rights reserved.
                     </div>
+                    <div class="text-center text-gray-600 sm:text-right">
+                        <div>
+                            Agent access: <a href="https://www.npmjs.com/package/@filearchitect/blankfiles-mcp" class="underline hover:text-gray-700" target="_blank"
+                                rel="noopener noreferrer">npm package</a> · <a
+                                href="https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.filearchitect/blankfiles-mcp"
+                                class="underline hover:text-gray-700" target="_blank" rel="noopener noreferrer">MCP registry</a>
+                        </div>
+                        <div>
+                            Server ID: <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">io.github.filearchitect/blankfiles-mcp</code>
+                        </div>
+                    </div>
                     <div class="text-gray-600">
                         Created by <a href="https://seblavoie.dev" class="underline hover:text-gray-700" target="_blank" rel="noopener noreferrer">Sébastien Lavoie</a> for <a
                             href="https://filearchitect.com" class="underline hover:text-gray-700" target="_blank" rel="noopener noreferrer">File
                             Architect</a>
-                        </a>
                     </div>
                 </div>
             </div>

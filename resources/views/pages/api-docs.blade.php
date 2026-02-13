@@ -19,6 +19,17 @@
             <p class="mt-4 text-lg text-gray-600">
                 Use the Blank Files API to list and download blank files programmatically. All endpoints return JSON unless noted. Throttling applies to avoid abuse.
             </p>
+            <div class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <h2 class="mt-0 text-xl font-semibold text-gray-900">Agent distribution links</h2>
+                <ul class="mt-2 list-disc space-y-1 pl-6 text-gray-700">
+                    <li>MCP Registry name: <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">io.github.filearchitect/blankfiles-mcp</code></li>
+                    <li>NPM package: <a href="https://www.npmjs.com/package/@filearchitect/blankfiles-mcp" class="font-medium text-gray-900 underline hover:no-underline"
+                            target="_blank" rel="noopener noreferrer">@filearchitect/blankfiles-mcp</a></li>
+                    <li>Registry search API: <a
+                            href="https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.filearchitect/blankfiles-mcp"
+                            class="font-medium text-gray-900 underline hover:no-underline" target="_blank" rel="noopener noreferrer">Lookup listing</a></li>
+                </ul>
+            </div>
             <p class="mt-2 text-gray-600">
                 See the <a href="{{ route('api-policy') }}" class="font-medium text-gray-900 underline hover:no-underline">API compatibility policy</a> for guarantees,
                 deprecations, and versioning.
