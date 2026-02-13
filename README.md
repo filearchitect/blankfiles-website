@@ -101,6 +101,36 @@ Production: `https://blankfiles.com`. HTML and JSON are available; use `Accept: 
 
 - [filearchitect/blank-files](https://github.com/filearchitect/blank-files) — Source of truth for the file list and blank file assets.
 
+## MCP server (for agent marketplaces/registries)
+
+This repository now includes a minimal MCP server that exposes Blank Files as tool calls.
+
+- Script: `scripts/mcp/blankfiles-mcp.mjs`
+- Run: `npm run mcp:server`
+- Optional env: `BLANKFILES_BASE_URL` (default: `https://blankfiles.com`)
+
+Available MCP tools:
+
+- `list_blank_files` — list files, optional filters (`category`, `type`, `limit`)
+- `files_by_type` — list entries by extension
+- `file_by_category_type` — deterministic single lookup by category + extension
+
+Example local MCP client config entry:
+
+```json
+{
+  "mcpServers": {
+    "blankfiles": {
+      "command": "node",
+      "args": ["/absolute/path/to/blankfiles-website/scripts/mcp/blankfiles-mcp.mjs"],
+      "env": {
+        "BLANKFILES_BASE_URL": "https://blankfiles.com"
+      }
+    }
+  }
+}
+```
+
 ## License
 
 This project is licensed under the MIT License.
