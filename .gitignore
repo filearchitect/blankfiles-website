@@ -21,3 +21,6 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/.mcpregistry_github_token
+/.mcpregistry_registry_token
+/mcp-publisher
