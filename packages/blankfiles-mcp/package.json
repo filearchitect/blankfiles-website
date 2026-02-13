@@ -1,7 +1,8 @@
 {
   "name": "@filearchitect/blankfiles-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP server for blankfiles.com API",
+  "mcpName": "io.github.filearchitect/blankfiles-mcp",
   "type": "module",
   "license": "MIT",
   "repository": {

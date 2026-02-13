@@ -14,7 +14,7 @@ Use one of:
 The registry entry in `server.json.template` expects:
 
 - package name: `@filearchitect/blankfiles-mcp`
-- package version: `1.0.0`
+- package version: `1.0.1`
 - stdio entrypoint that starts the MCP server
 
 This repo includes a publishable package at:
@@ -33,7 +33,7 @@ The published package `package.json` should include:
 ```json
 {
   "name": "@filearchitect/blankfiles-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "bin": {
     "blankfiles-mcp": "./blankfiles-mcp.mjs"
