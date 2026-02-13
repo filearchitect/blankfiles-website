@@ -10,6 +10,11 @@
 
     {{-- Per-page SEO meta --}}
     {{ $meta ?? '' }}
+    <link rel="alternate" type="application/json" href="{{ url('/api/v1/files') }}">
+    <link rel="alternate" type="application/json" href="{{ route('openapi') }}">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ route('sitemap') }}">
+    <link rel="alternate" type="text/plain" href="{{ route('llms') }}">
+    <link rel="alternate" type="text/plain" href="{{ route('llms-full') }}">
 
     <!-- Fonts -->
 

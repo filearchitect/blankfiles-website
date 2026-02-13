@@ -9,6 +9,23 @@
         <meta property="og:type" content="article">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta name="twitter:card" content="summary">
+        @php
+            $fileJsonLd = [
+                '@context' => 'https://schema.org',
+                '@type' => 'Dataset',
+                'name' => 'Blank .' . $file['type'] . ' file',
+                'description' => 'Minimal valid blank file for ' . Str::ucfirst(str_replace('-', ' ', $file['category'])) . '.',
+                'url' => url()->current(),
+                'keywords' => ['blank file', $file['type'], $file['category']],
+                'distribution' => [
+                    '@type' => 'DataDownload',
+                    'contentUrl' => route('files.download', ['category' => $file['category'], 'type' => $file['type']]),
+                    'encodingFormat' => $file['package'] ? 'application/zip' : 'application/octet-stream',
+                ],
+                'sameAs' => $file['url'],
+            ];
+        @endphp
+        <script type="application/ld+json">{!! json_encode($fileJsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     </x-slot>
     <div class="mx-auto px-4 lg:px-8">
         <nav class="mb-8 border-b border-gray-200 pb-8 pt-4 text-sm text-gray-500" aria-label="Breadcrumb">

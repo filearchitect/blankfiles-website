@@ -8,6 +8,26 @@
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta name="twitter:card" content="summary">
+        @php
+            $catalogJsonLd = [
+                '@context' => 'https://schema.org',
+                '@type' => 'DataCatalog',
+                'name' => 'Blank Files',
+                'description' => 'Minimal valid blank files by category and extension for testing and automation.',
+                'url' => route('home'),
+                'dataset' => [
+                    '@type' => 'Dataset',
+                    'name' => 'Blank Files Catalog',
+                    'distribution' => [
+                        '@type' => 'DataDownload',
+                        'contentUrl' => url('/api/v1/files'),
+                        'encodingFormat' => 'application/json',
+                    ],
+                ],
+                'mainEntityOfPage' => route('api-docs'),
+            ];
+        @endphp
+        <script type="application/ld+json">{!! json_encode($catalogJsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     </x-slot>
 
     <div class="px-4 py-6 sm:px-6 lg:px-8">
@@ -25,18 +45,18 @@
 
                 <div class="grid grid-cols-2 gap-3 py-6 md:grid-cols-3 lg:grid-cols-4">
                     @foreach ($files as $file)
-                        <div class="group relative block cursor-pointer rounded bg-gray-100 px-3 py-2 text-center text-gray-700 transition-colors hover:bg-gray-200" role="link"
-                            tabindex="0" onclick="window.location='{{ route('files.show', ['category' => $file['category'], 'type' => $file['type']]) }}'"
-                            onkeydown="if(event.key==='Enter'||event.key===' '){window.location='{{ route('files.show', ['category' => $file['category'], 'type' => $file['type']]) }}';}">
-                            <span class="file-label">.{{ $file['type'] }}</span>
-                            @if ($file['package'])
-                                <span class="package-badge absolute right-2 top-2 rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-500">zipped</span>
-                            @endif
+                        <div class="group relative rounded bg-gray-100 text-center text-gray-700 transition-colors hover:bg-gray-200">
+                            <a href="{{ route('files.show', ['category' => $file['category'], 'type' => $file['type']]) }}"
+                                class="block rounded px-3 py-2 pr-11 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                                <span class="file-label">.{{ $file['type'] }}</span>
+                                @if ($file['package'])
+                                    <span class="package-badge absolute right-2 top-2 rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-500">zipped</span>
+                                @endif
+                            </a>
 
                             <a href="{{ route('files.download', ['category' => $file['category'], 'type' => $file['type']]) }}"
                                 target="_blank" rel="noopener noreferrer"
-                                onclick="event.stopPropagation()"
-                                class="pointer-events-none absolute bottom-2 right-2 inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-900 opacity-0 transition-opacity hover:bg-gray-50 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-gray-400 group-hover:pointer-events-auto group-hover:opacity-100"
+                                class="pointer-events-none absolute bottom-2 right-2 inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-900 opacity-0 transition-opacity hover:bg-gray-50 focus:pointer-events-auto focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-gray-400 group-hover:pointer-events-auto group-hover:opacity-100"
                                 title="Download .{{ $file['type'] }}{{ $file['package'] ? ' (zip)' : '' }}"
                                 aria-label="Download .{{ $file['type'] }}{{ $file['package'] ? ' (zip)' : '' }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" class="h-4 w-4">

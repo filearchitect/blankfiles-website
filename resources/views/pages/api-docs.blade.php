@@ -24,6 +24,13 @@
             <p class="mt-2 text-gray-600">
                 <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">{{ url('/') }}</code>
             </p>
+            <h2 class="mt-8 text-xl font-semibold text-gray-800">Machine discovery</h2>
+            <ul class="mt-2 list-disc space-y-1 pl-6 text-gray-600">
+                <li><code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">{{ route('openapi') }}</code> (OpenAPI schema)</li>
+                <li><code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">{{ route('llms') }}</code> and <code
+                        class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">{{ route('llms-full') }}</code> (agent-readable docs)</li>
+                <li><code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">{{ route('sitemap') }}</code> (crawlable URL index)</li>
+            </ul>
             <h2 class="mt-8 text-xl font-semibold text-gray-800">API routes</h2>
             <p class="mt-2 text-gray-600">Prefix: <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm">/api/v1</code>. Throttle: 30 requests per minute per client.</p>
 
