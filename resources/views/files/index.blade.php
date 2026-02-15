@@ -35,14 +35,16 @@
             $groupedFiles = $files->groupBy('category');
         @endphp
 
-        <section class="mb-10 rounded-lg border border-gray-200 bg-gray-50 p-5">
-            <h2 class="text-2xl font-semibold text-gray-900">Looking for binary upload testing files?</h2>
-            <p class="mt-2 text-gray-600">Start with high-intent formats or jump to the dedicated upload testing page.</p>
-            <div class="mt-4 flex flex-wrap gap-2">
+        <section class="mb-4 rounded-lg border border-gray-200 bg-gray-50 p-5">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <h2 class="text-2xl font-semibold text-gray-900">Popular File Formats</h2>
                 <a href="{{ route('upload-testing') }}"
                     class="inline-flex rounded bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-800">
-                    Open Upload Testing Guide
+                    Upload Testing Guide
                 </a>
+            </div>
+            <p class="mt-2 text-gray-600">Quick links to the most-used binary file formats.</p>
+            <div class="mt-4 flex flex-wrap gap-2">
                 @foreach ($quickFiles as $quickFile)
                     <a href="{{ route('files.show', ['category' => $quickFile['category'], 'type' => $quickFile['type']]) }}"
                         class="inline-flex rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
@@ -50,6 +52,11 @@
                     </a>
                 @endforeach
             </div>
+        </section>
+
+        <section class="mb-10 rounded-lg border border-gray-200 bg-gray-50 p-5">
+            <h2 class="text-2xl font-semibold text-gray-900">All File Categories</h2>
+            <p class="mt-2 text-gray-600">Jump to every category section below.</p>
             <div class="mt-4 flex flex-wrap gap-2">
                 @foreach ($featuredCategories as $category)
                     <a href="#{{ $category }}" class="inline-flex rounded border border-gray-200 bg-white px-3 py-1.5 text-xs uppercase tracking-wide text-gray-600 hover:bg-gray-50">
