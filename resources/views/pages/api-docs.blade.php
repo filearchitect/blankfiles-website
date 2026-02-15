@@ -113,7 +113,7 @@
   "generated_at": "2026-02-13T15:00:00Z",
   "catalog": {
     "source_repository": "https://github.com/filearchitect/blank-files",
-    "cdn_url": "https://cdn.statically.io/gh/filearchitect/blank-files/main",
+    "cdn_url": "https://cdn.jsdelivr.net/gh/filearchitect/blank-files@main",
     "file_count": 300,
     "type_count": 120,
     "category_count": 15

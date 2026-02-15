@@ -15,7 +15,8 @@ return [
     |
     */
 
-    'cache_enabled' => env('CACHE_ENABLED', false),
+    'cache_enabled'       => env('CACHE_ENABLED', false),
+    'catalog_ttl_minutes' => env('CATALOG_TTL_MINUTES', 10),
 
     'default'       => env('CACHE_STORE', 'database'),
 

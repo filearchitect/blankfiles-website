@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class FileService {
@@ -12,7 +13,7 @@ class FileService {
      */
     public function getAllFiles(): array {
         if (config('cache.cache_enabled')) {
-            return Cache::remember('cdn_files', now()->addHours(1), function () {
+            return Cache::remember('cdn_files', now()->addMinutes((int) config('cache.catalog_ttl_minutes')), function () {
                 return $this->fetchFilesFromCDN('/files/files.json');
             });
         }
@@ -22,7 +23,7 @@ class FileService {
 
     public function fetchFilesFromCDN(string $path = '/files/files.json') {
         $baseUrl = rtrim(config('app.cdn_url'), '/');
-        return Http::get($baseUrl . $path)->json();
+        return Http::timeout(15)->get($baseUrl . $path)->json();
     }
 
     /**

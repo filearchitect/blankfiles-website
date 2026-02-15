@@ -28,7 +28,7 @@ return [
 
     'env'             => env('APP_ENV', 'production'),
 
-    'cdn_url'         => env('CDN_URL', 'https://cdn.statically.io/gh/filearchitect/blank-files/main'),
+    'cdn_url'         => env('CDN_URL', 'https://cdn.jsdelivr.net/gh/filearchitect/blank-files@main'),
 
     /*
     |--------------------------------------------------------------------------
