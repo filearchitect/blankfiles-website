@@ -82,6 +82,7 @@ test('api status returns catalog metadata with cache validators', function () {
         'generated_at',
         'catalog' => [
             'source_repository',
+            'catalog_url',
             'cdn_url',
             'file_count',
             'type_count',

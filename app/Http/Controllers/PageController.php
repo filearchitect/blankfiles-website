@@ -317,9 +317,10 @@ class PageController extends Controller
                             'generated_at' => ['type' => 'string', 'format' => 'date-time'],
                             'catalog' => [
                                 'type' => 'object',
-                                'required' => ['source_repository', 'cdn_url', 'file_count', 'type_count', 'category_count'],
+                                'required' => ['source_repository', 'catalog_url', 'cdn_url', 'file_count', 'type_count', 'category_count'],
                                 'properties' => [
                                     'source_repository' => ['type' => 'string', 'format' => 'uri'],
+                                    'catalog_url' => ['type' => 'string', 'format' => 'uri'],
                                     'cdn_url' => ['type' => 'string', 'format' => 'uri'],
                                     'file_count' => ['type' => 'integer', 'example' => 300],
                                     'type_count' => ['type' => 'integer', 'example' => 120],

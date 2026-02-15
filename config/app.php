@@ -29,6 +29,7 @@ return [
     'env'             => env('APP_ENV', 'production'),
 
     'cdn_url'         => env('CDN_URL', 'https://cdn.jsdelivr.net/gh/filearchitect/blank-files@main'),
+    'catalog_url'     => env('CATALOG_URL', 'https://raw.githubusercontent.com/filearchitect/blank-files/main/files/files.json'),
 
     /*
     |--------------------------------------------------------------------------

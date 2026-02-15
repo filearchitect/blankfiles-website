@@ -69,6 +69,7 @@ class FileController extends Controller {
             'generated_at' => $lastModified->copy()->toIso8601String(),
             'catalog' => [
                 'source_repository' => 'https://github.com/filearchitect/blank-files',
+                'catalog_url' => (string) config('app.catalog_url'),
                 'cdn_url' => rtrim((string) config('app.cdn_url'), '/'),
                 'file_count' => $files->count(),
                 'type_count' => $files->pluck('type')->unique()->count(),

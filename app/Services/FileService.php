@@ -14,16 +14,21 @@ class FileService {
     public function getAllFiles(): array {
         if (config('cache.cache_enabled')) {
             return Cache::remember('cdn_files', now()->addMinutes((int) config('cache.catalog_ttl_minutes')), function () {
-                return $this->fetchFilesFromCDN('/files/files.json');
+                return $this->fetchCatalog();
             });
         }
 
-        return $this->fetchFilesFromCDN('/files/files.json');
+        return $this->fetchCatalog();
     }
 
-    public function fetchFilesFromCDN(string $path = '/files/files.json') {
-        $baseUrl = rtrim(config('app.cdn_url'), '/');
-        return Http::timeout(15)->get($baseUrl . $path)->json();
+    public function fetchCatalog(): array {
+        $catalogUrl = trim((string) config('app.catalog_url', ''));
+        if ($catalogUrl === '') {
+            $baseUrl = rtrim(config('app.cdn_url'), '/');
+            $catalogUrl = $baseUrl . '/files/files.json';
+        }
+
+        return Http::timeout(15)->get($catalogUrl)->json();
     }
 
     /**

@@ -31,7 +31,8 @@ Or use [Laravel Herd](https://herd.laravel.com) with a `.test` domain.
 
 | Variable        | Description                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CDN_URL`       | **Required.** Base URL where the file catalog and assets are served. The app expects `{CDN_URL}/files/files.json` for the catalog and `{CDN_URL}/files/{filename}` for each file. Examples: `https://cdn.jsdelivr.net/gh/filearchitect/blank-files@main`, `https://raw.githubusercontent.com/filearchitect/blank-files/main` (note: raw GitHub has rate limits). Default in [config/app.php](config/app.php) is jsDelivr GitHub CDN. |
+| `CDN_URL`       | **Required.** Base URL used to construct downloadable file URLs as `{CDN_URL}/files/{filename}`. Example: `https://cdn.jsdelivr.net/gh/filearchitect/blank-files@main` (default in [config/app.php](config/app.php)). |
+| `CATALOG_URL`   | Optional. Direct URL for the catalog JSON (`files/files.json`). Default is `https://raw.githubusercontent.com/filearchitect/blank-files/main/files/files.json` for freshness. |
 | `CACHE_ENABLED` | Optional. When `true`, the file list from the CDN is cached. TTL is controlled by `CATALOG_TTL_MINUTES` (default `10`). See [config/cache.php](config/cache.php) and [app/Services/FileService.php](app/Services/FileService.php).                                                                                                                                                                                           |
 | `CATALOG_TTL_MINUTES` | Optional. Cache TTL in minutes for the remote catalog when `CACHE_ENABLED=true`. Lower values reflect new formats sooner; higher values reduce CDN fetches. |
 | `API_KEYS` | Optional. Comma-separated API keys for higher-rate API clients (used by `X-API-Key` or `Authorization: Bearer ...`). |
@@ -45,7 +46,7 @@ Or use [Laravel Herd](https://herd.laravel.com) with a `.test` domain.
 | --------------------------------------------- | ------------------------------------------------------------ |
 | `app/Http/Controllers/FileController.php`     | Web: homepage, file detail page, download proxy.             |
 | `app/Http/Controllers/Api/FileController.php` | API: list all files, list files by type.                     |
-| `app/Services/FileService.php`                | Fetches and formats file list from CDN (`files/files.json`). |
+| `app/Services/FileService.php`                | Fetches catalog JSON (`CATALOG_URL`) and formats file URLs from `CDN_URL`. |
 | `routes/web.php`                              | Web routes (home, files show, download).                     |
 | `routes/api.php`                              | API v1 routes.                                               |
 | `resources/views/files/`                      | Blade views for file listing and file detail.                |
