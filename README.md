@@ -183,6 +183,27 @@ Published package workspace:
 
 - `packages/blankfiles-mcp` (publish as `@filearchitect/blankfiles-mcp`)
 
+## OpenClaw skill (ClawHub discoverability)
+
+This repository includes an OpenClaw-ready skill bundle:
+
+- Skill path: `skills/blankfiles`
+- Skill entry: `skills/blankfiles/SKILL.md`
+- Publish guide: `skills/blankfiles/references/publish.md`
+
+Typical publish flow:
+
+```bash
+npm i -g clawhub
+clawhub login
+clawhub publish ./skills/blankfiles \
+  --slug filearchitect-blankfiles \
+  --name "Blank Files Gateway" \
+  --version 1.0.0 \
+  --changelog "Initial release" \
+  --tags latest
+```
+
 ## License
 
 This project is licensed under the MIT License.
