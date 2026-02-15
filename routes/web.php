@@ -8,6 +8,7 @@ Route::get('/', [FileController::class, 'index'])->middleware(['throttle:30,1'])
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/api-docs', [PageController::class, 'apiDocs'])->name('api-docs');
 Route::get('/api-policy', [PageController::class, 'apiPolicy'])->name('api-policy');
+Route::get('/upload-testing', [PageController::class, 'uploadTesting'])->name('upload-testing');
 Route::get('/llms.txt', [PageController::class, 'llms'])->name('llms');
 Route::get('/llms-full.txt', [PageController::class, 'llmsFull'])->name('llms-full');
 Route::get('/openapi.json', [PageController::class, 'openApi'])->name('openapi');

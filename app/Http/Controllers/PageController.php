@@ -26,6 +26,48 @@ class PageController extends Controller
         return view('pages.api-policy');
     }
 
+    public function uploadTesting(FileService $fileService)
+    {
+        $files = $fileService->getFormattedFiles();
+
+        $priorityTypes = [
+            'jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'heic',
+            'pdf', 'docx', 'xlsx', 'pptx',
+            'mp3', 'wav', 'aac', 'ogg',
+            'mp4', 'mov', 'avi', 'webm',
+            'psd', 'ai', 'fig',
+        ];
+
+        $priorityFiles = collect($priorityTypes)
+            ->map(fn ($type) => $files->firstWhere('type', $type))
+            ->filter()
+            ->values();
+
+        $uploadCategories = [
+            'image',
+            'audio',
+            'video',
+            '3D',
+            '3D-editing',
+            'image-editing',
+            'video-editing',
+            'audio-editing',
+            'document-text',
+            'document-spreadsheet',
+            'document-presentation',
+        ];
+
+        $filesByCategory = $files
+            ->whereIn('category', $uploadCategories)
+            ->groupBy('category')
+            ->map(fn ($items) => $items->take(12)->values());
+
+        return view('pages.upload-testing', [
+            'priorityFiles' => $priorityFiles,
+            'filesByCategory' => $filesByCategory,
+        ]);
+    }
+
     public function llms(): Response
     {
         $lines = [
@@ -300,6 +342,7 @@ class PageController extends Controller
             ['loc' => route('about'), 'lastmod' => $today, 'priority' => '0.7'],
             ['loc' => route('api-docs'), 'lastmod' => $today, 'priority' => '0.8'],
             ['loc' => route('api-policy'), 'lastmod' => $today, 'priority' => '0.8'],
+            ['loc' => route('upload-testing'), 'lastmod' => $today, 'priority' => '0.9'],
             ['loc' => route('llms'), 'lastmod' => $today, 'priority' => '0.9'],
             ['loc' => route('llms-full'), 'lastmod' => $today, 'priority' => '0.9'],
             ['loc' => route('openapi'), 'lastmod' => $today, 'priority' => '0.9'],

@@ -68,5 +68,36 @@
             </section>
         </div>
 
+        @if ($relatedInCategory->isNotEmpty())
+            <section class="mt-8 border-t border-gray-200 pt-8">
+                <h2 class="text-xl font-semibold text-gray-900">More {{ Str::ucfirst(str_replace('-', ' ', $file['category'])) }} blank files</h2>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    @foreach ($relatedInCategory as $related)
+                        <a href="{{ route('files.show', ['category' => $related['category'], 'type' => $related['type']]) }}"
+                            class="inline-flex rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
+                            .{{ $related['type'] }}
+                        </a>
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
+        @if ($relatedByTypeFamily->isNotEmpty())
+            <section class="mt-8 border-t border-gray-200 pt-8">
+                <h2 class="text-xl font-semibold text-gray-900">Related binary formats for upload testing</h2>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    @foreach ($relatedByTypeFamily as $related)
+                        <a href="{{ route('files.show', ['category' => $related['category'], 'type' => $related['type']]) }}"
+                            class="inline-flex rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
+                            .{{ $related['type'] }}
+                        </a>
+                    @endforeach
+                </div>
+                <p class="mt-4 text-sm text-gray-600">
+                    Need broader test coverage? Browse the <a href="{{ route('upload-testing') }}" class="underline hover:text-gray-700">binary upload testing guide</a>.
+                </p>
+            </section>
+        @endif
+
     </div>
 </x-guest-layout>

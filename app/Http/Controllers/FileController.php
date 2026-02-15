@@ -38,8 +38,37 @@ class FileController extends Controller {
 
         abort_unless($file, 404);
 
+        $relatedInCategory = $files
+            ->where('category', $category)
+            ->where('type', '!=', $type)
+            ->take(12)
+            ->values();
+
+        $binaryTypeGroups = [
+            'image' => ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'heic', 'heif', 'bmp', 'tiff', 'tif', 'ico', 'jp2'],
+            'audio' => ['mp3', 'wav', 'aac', 'ogg', 'flac', 'aiff', 'amr', 'wma'],
+            'video' => ['mp4', 'mov', 'avi', 'webm', 'm4v', 'wmp'],
+            'design' => ['psd', 'psb', 'ai', 'fig', 'aep', 'prproj'],
+            'three_d' => ['obj', 'fbx', 'dae', '3ds', 'blend', 'c4d'],
+            'office_binary' => ['docx', 'pdf', 'xlsx', 'ods', 'pptx', 'odp', 'pages', 'odt'],
+        ];
+
+        $currentGroup = collect($binaryTypeGroups)
+            ->first(fn ($extensions) => in_array($type, $extensions, true));
+
+        $relatedByTypeFamily = collect();
+        if ($currentGroup) {
+            $relatedByTypeFamily = $files
+                ->whereIn('type', $currentGroup)
+                ->reject(fn ($item) => $item['category'] === $category && $item['type'] === $type)
+                ->take(12)
+                ->values();
+        }
+
         return view('files.show', [
             'file' => $file,
+            'relatedInCategory' => $relatedInCategory,
+            'relatedByTypeFamily' => $relatedByTypeFamily,
             'title' => Str::upper("{$type} blank files for {$category}"),
         ]);
     }
