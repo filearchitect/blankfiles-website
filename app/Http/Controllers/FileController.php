@@ -18,12 +18,46 @@ class FileController extends Controller {
      */
     public function index() {
         $files = $this->fileService->getFormattedFiles();
+        $quickTypes = [
+            'jpg', 'png', 'webp', 'heic',
+            'pdf', 'docx', 'xlsx', 'pptx',
+            'mp3', 'wav', 'mp4', 'mov',
+            'psd', 'ai', 'fig', 'obj',
+        ];
+        $quickFiles = collect($quickTypes)
+            ->map(fn ($type) => $files->firstWhere('type', $type))
+            ->filter()
+            ->values();
+
+        $binaryCategories = [
+            'image',
+            'audio',
+            'video',
+            'image-editing',
+            'audio-editing',
+            'video-editing',
+            '3D',
+            '3D-editing',
+            'document-text',
+            'document-spreadsheet',
+            'document-presentation',
+        ];
+
+        $featuredCategories = $files
+            ->whereIn('category', $binaryCategories)
+            ->groupBy('category')
+            ->keys()
+            ->values();
 
         if (request()->wantsJson()) {
             return response()->json(['files' => $files]);
         }
 
-        return view('files.index', ['files' => $files]);
+        return view('files.index', [
+            'files' => $files,
+            'quickFiles' => $quickFiles,
+            'featuredCategories' => $featuredCategories,
+        ]);
     }
 
     /**

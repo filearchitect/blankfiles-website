@@ -35,6 +35,30 @@
             $groupedFiles = $files->groupBy('category');
         @endphp
 
+        <section class="mb-10 rounded-lg border border-gray-200 bg-gray-50 p-5">
+            <h2 class="text-2xl font-semibold text-gray-900">Looking for binary upload testing files?</h2>
+            <p class="mt-2 text-gray-600">Start with high-intent formats or jump to the dedicated upload testing page.</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+                <a href="{{ route('upload-testing') }}"
+                    class="inline-flex rounded bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-800">
+                    Open Upload Testing Guide
+                </a>
+                @foreach ($quickFiles as $quickFile)
+                    <a href="{{ route('files.show', ['category' => $quickFile['category'], 'type' => $quickFile['type']]) }}"
+                        class="inline-flex rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
+                        .{{ $quickFile['type'] }}
+                    </a>
+                @endforeach
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+                @foreach ($featuredCategories as $category)
+                    <a href="#{{ $category }}" class="inline-flex rounded border border-gray-200 bg-white px-3 py-1.5 text-xs uppercase tracking-wide text-gray-600 hover:bg-gray-50">
+                        {{ Str::ucfirst(str_replace('-', ' ', $category)) }}
+                    </a>
+                @endforeach
+            </div>
+        </section>
+
         @foreach ($groupedFiles as $category => $files)
             <div class="mb-8 bg-white" id="{{ $category }}">
                 <div class="border-b border-gray-200 py-4">

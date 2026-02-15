@@ -60,6 +60,12 @@
                 anyone who wants a clean starting file. No sign-up or account required; all downloads are free.
             </p>
 
+            <h2 class="mt-8 text-xl font-semibold text-gray-800">Binary upload testing</h2>
+            <p class="mt-2 text-gray-600">
+                Blank Files has a dedicated <a href="{{ route('upload-testing') }}" class="font-medium text-gray-900 underline hover:no-underline">binary upload testing guide</a>
+                with common image, audio, video, office, design, and 3D formats for integration and validation workflows.
+            </p>
+
             <p class="mt-8 text-gray-600">
                 <a href="{{ route('home') }}" class="font-medium text-gray-900 underline hover:no-underline">Browse all blank files</a> or read the <a
                     href="{{ route('api-docs') }}" class="font-medium text-gray-900 underline hover:no-underline">API documentation</a> to integrate with your app.
