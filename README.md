@@ -83,7 +83,6 @@ Production: `https://blankfiles.com`. HTML and JSON are available; use `Accept: 
 | ------ | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `GET`  | `/`                                 | Homepage: file list by category. Responds with JSON when `Accept: application/json`. Throttle: 30/min.                                     |
 | `GET`  | `/upload-testing`                   | Binary-focused landing page for upload testing intent, linking to high-demand file formats and categories.                                   |
-| `GET`  | `/binary-roadmap`                   | Public roadmap of planned next binary extensions to add based on demand.                                                                     |
 | `GET`  | `/files/{category}/{type}`          | SEO-friendly file detail page (e.g. `/files/document-spreadsheet/xlsx`). Constraints: `category`, `type` = `[A-Za-z0-9\-]+`.               |
 | `GET`  | `/files/download/{category}/{type}` | Download proxy: streams the file with `Content-Disposition: attachment` (filename `blank.{type}` or `blank.{type}.zip`). Throttle: 60/min. |
 

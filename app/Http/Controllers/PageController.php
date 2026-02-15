@@ -69,16 +69,6 @@ class PageController extends Controller
         ]);
     }
 
-    public function binaryRoadmap()
-    {
-        return view('pages.binary-roadmap', [
-            'priority1' => collect(config('binary_roadmap.priority_1', [])),
-            'priority2' => collect(config('binary_roadmap.priority_2', [])),
-            'priority3' => collect(config('binary_roadmap.priority_3', [])),
-            'priority4' => collect(config('binary_roadmap.priority_4', [])),
-        ]);
-    }
-
     public function llms(): Response
     {
         $lines = [
@@ -90,7 +80,6 @@ class PageController extends Controller
             '- API docs: ' . route('api-docs'),
             '- API compatibility policy: ' . route('api-policy'),
             '- Upload testing landing page: ' . route('upload-testing'),
-            '- Binary roadmap: ' . route('binary-roadmap'),
             '- OpenAPI schema: ' . route('openapi'),
             '- API files endpoint: ' . url('/api/v1/files'),
             '- API status endpoint: ' . url('/api/v1/status'),
@@ -121,7 +110,6 @@ class PageController extends Controller
             '- API docs: ' . route('api-docs'),
             '- API compatibility policy: ' . route('api-policy'),
             '- Upload testing landing page: ' . route('upload-testing'),
-            '- Binary roadmap: ' . route('binary-roadmap'),
             '- OpenAPI schema: ' . route('openapi'),
             '- Source catalog repo: https://github.com/filearchitect/blank-files',
             '',
@@ -358,7 +346,6 @@ class PageController extends Controller
             ['loc' => route('api-docs'), 'lastmod' => $today, 'priority' => '0.8'],
             ['loc' => route('api-policy'), 'lastmod' => $today, 'priority' => '0.8'],
             ['loc' => route('upload-testing'), 'lastmod' => $today, 'priority' => '0.9'],
-            ['loc' => route('binary-roadmap'), 'lastmod' => $today, 'priority' => '0.8'],
             ['loc' => route('llms'), 'lastmod' => $today, 'priority' => '0.9'],
             ['loc' => route('llms-full'), 'lastmod' => $today, 'priority' => '0.9'],
             ['loc' => route('openapi'), 'lastmod' => $today, 'priority' => '0.9'],
