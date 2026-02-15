@@ -9,6 +9,48 @@
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta name="twitter:card" content="summary">
+        @php
+            $uploadTestingJsonLd = [
+                '@context' => 'https://schema.org',
+                '@type' => 'CollectionPage',
+                'name' => 'Binary files for upload testing',
+                'description' => 'Minimal valid binary files for upload validation and parser testing.',
+                'url' => route('upload-testing'),
+                'isPartOf' => route('home'),
+            ];
+            $faqJsonLd = [
+                '@context' => 'https://schema.org',
+                '@type' => 'FAQPage',
+                'mainEntity' => [
+                    [
+                        '@type' => 'Question',
+                        'name' => 'What is a minimal valid binary file?',
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => 'A file that is as small as possible while still being valid for its format and openable by compatible software.',
+                        ],
+                    ],
+                    [
+                        '@type' => 'Question',
+                        'name' => 'Can I use these files for upload testing?',
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => 'Yes. The files are intended for upload validation, MIME checks, parsers, and ingestion pipelines.',
+                        ],
+                    ],
+                    [
+                        '@type' => 'Question',
+                        'name' => 'Are these files direct-download and API-accessible?',
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => 'Yes. Each extension page provides direct download and the API exposes machine-readable file URLs.',
+                        ],
+                    ],
+                ],
+            ];
+        @endphp
+        <script type="application/ld+json">{!! json_encode($uploadTestingJsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+        <script type="application/ld+json">{!! json_encode($faqJsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     </x-slot>
 
     <div class="mx-auto px-4 lg:px-8">
@@ -50,6 +92,23 @@
                     </div>
                 </section>
             @endforeach
+
+            <h2 class="mt-10 text-xl font-semibold text-gray-800">FAQ</h2>
+            <div class="mt-4 space-y-4 text-gray-600">
+                <div>
+                    <h3 class="text-base font-semibold text-gray-900">What is a minimal valid binary file?</h3>
+                    <p class="mt-1">A file that is as small as possible while still being valid for its format and openable by compatible software.</p>
+                </div>
+                <div>
+                    <h3 class="text-base font-semibold text-gray-900">Can I use these files for upload testing?</h3>
+                    <p class="mt-1">Yes. They are designed for upload validation, MIME checks, parser testing, and ingestion pipeline edge cases.</p>
+                </div>
+                <div>
+                    <h3 class="text-base font-semibold text-gray-900">Where do these files come from?</h3>
+                    <p class="mt-1">The canonical catalog is maintained in <a href="https://github.com/filearchitect/blank-files" class="underline hover:text-gray-700"
+                            target="_blank" rel="noopener noreferrer">filearchitect/blank-files</a>.</p>
+                </div>
+            </div>
         </div>
     </div>
 </x-guest-layout>
