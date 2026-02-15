@@ -30,6 +30,7 @@
                 <nav class="flex items-center gap-6" aria-label="Main">
                     <a href="{{ route('about') }}" class="font-medium text-gray-600 hover:text-gray-900">About</a>
                     <a href="{{ route('upload-testing') }}" class="font-medium text-gray-600 hover:text-gray-900">Upload Testing</a>
+                    <a href="{{ route('binary-roadmap') }}" class="font-medium text-gray-600 hover:text-gray-900">Roadmap</a>
                     <a href="{{ route('api-docs') }}" class="font-medium text-gray-600 hover:text-gray-900">API</a>
                     <a href="https://github.com/filearchitect/blank-files"
                         class="inline-flex items-center rounded-sm bg-gray-800 px-4 py-2 text-white transition-colors duration-200 hover:bg-gray-700" target="_blank"

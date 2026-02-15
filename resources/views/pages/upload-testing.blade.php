@@ -93,6 +93,17 @@
                 </section>
             @endforeach
 
+            <h2 class="mt-10 text-xl font-semibold text-gray-800">Planned next binary formats</h2>
+            <p class="mt-2 text-gray-600">
+                We prioritize formats based on upload-testing demand and developer workflows. See the full <a href="{{ route('binary-roadmap') }}"
+                    class="underline hover:text-gray-700">binary roadmap</a>.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2">
+                @foreach ($plannedNextFormats as $extension)
+                    <span class="inline-flex rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700">.{{ $extension }}</span>
+                @endforeach
+            </div>
+
             <h2 class="mt-10 text-xl font-semibold text-gray-800">FAQ</h2>
             <div class="mt-4 space-y-4 text-gray-600">
                 <div>

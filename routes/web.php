@@ -2,13 +2,15 @@
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\PageController;
+use App\Http\Middleware\TrackWebLanding;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [FileController::class, 'index'])->middleware(['throttle:30,1'])->name('home');
+Route::get('/', [FileController::class, 'index'])->middleware(['throttle:30,1', TrackWebLanding::class])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/api-docs', [PageController::class, 'apiDocs'])->name('api-docs');
 Route::get('/api-policy', [PageController::class, 'apiPolicy'])->name('api-policy');
-Route::get('/upload-testing', [PageController::class, 'uploadTesting'])->name('upload-testing');
+Route::get('/upload-testing', [PageController::class, 'uploadTesting'])->middleware([TrackWebLanding::class])->name('upload-testing');
+Route::get('/binary-roadmap', [PageController::class, 'binaryRoadmap'])->name('binary-roadmap');
 Route::get('/llms.txt', [PageController::class, 'llms'])->name('llms');
 Route::get('/llms-full.txt', [PageController::class, 'llmsFull'])->name('llms-full');
 Route::get('/openapi.json', [PageController::class, 'openApi'])->name('openapi');
@@ -22,6 +24,7 @@ Route::get('/files/download/{category}/{type}', [FileController::class, 'downloa
 
 // SEO-friendly file detail route
 Route::get('/files/{category}/{type}', [FileController::class, 'show'])
+    ->middleware([TrackWebLanding::class])
     ->where(['category' => '[A-Za-z0-9\-]+', 'type' => '[A-Za-z0-9\-]+'])
     ->name('files.show');
 
