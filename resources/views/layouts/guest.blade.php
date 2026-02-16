@@ -20,6 +20,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials.openpanel')
 </head>
 
 <body class="font-sans text-gray-900 antialiased">

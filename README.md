@@ -39,6 +39,8 @@ Or use [Laravel Herd](https://herd.laravel.com) with a `.test` domain.
 | `API_PUBLIC_RATE_LIMIT` | Optional. Public API requests/minute limit (default `30`). |
 | `API_KEY_RATE_LIMIT` | Optional. API-key requests/minute limit (default `300`). |
 | `API_USAGE_LOG_CHANNEL` | Optional. Logging channel for API usage analytics (default `api_usage`). |
+| `OPENPANEL_CLIENT_ID` | Optional. Enables OpenPanel web analytics script when set. |
+| `OPENPANEL_CLIENT_SECRET` | Optional. Reserved for server-side OpenPanel events (not exposed to browser script). |
 
 ## Project structure
 
