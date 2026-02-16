@@ -2,10 +2,11 @@
     <x-slot name="title">Blank .{{ $file['type'] }} file for {{ Str::ucfirst(str_replace('-', ' ', $file['category'])) }} | Blank Files</x-slot>
     <x-slot name="meta">
         <meta name="description"
-            content="Download a free blank .{{ $file['type'] }} file{{ $file['package'] ? ' (zip package)' : '' }} for {{ Str::ucfirst(str_replace('-', ' ', $file['category'])) }}.">
+            content="Download a free minimal valid blank .{{ $file['type'] }} file{{ $file['package'] ? ' (zip package)' : '' }} for {{ Str::ucfirst(str_replace('-', ' ', $file['category'])) }} upload testing, parsing, and automation workflows.">
         <link rel="canonical" href="{{ url()->current() }}" />
         <meta property="og:title" content="Blank .{{ $file['type'] }} file for {{ Str::ucfirst(str_replace('-', ' ', $file['category'])) }}">
-        <meta property="og:description" content="Get a clean, ready-to-use blank .{{ $file['type'] }} file.">
+        <meta property="og:description"
+            content="Download a minimal valid blank .{{ $file['type'] }} file for reliable upload testing and parser validation workflows.">
         <meta property="og:type" content="article">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta name="twitter:card" content="summary">
@@ -14,7 +15,7 @@
                 '@context' => 'https://schema.org',
                 '@type' => 'Dataset',
                 'name' => 'Blank .' . $file['type'] . ' file',
-                'description' => 'Minimal valid blank file for ' . Str::ucfirst(str_replace('-', ' ', $file['category'])) . '.',
+                'description' => 'Minimal valid blank .' . $file['type'] . ' file for ' . Str::ucfirst(str_replace('-', ' ', $file['category'])) . ' upload testing, parser validation, and automation workflows.',
                 'url' => url()->current(),
                 'keywords' => ['blank file', $file['type'], $file['category']],
                 'distribution' => [
