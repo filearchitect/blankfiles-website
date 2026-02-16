@@ -14,7 +14,7 @@ clawhub whoami
 
 ```bash
 clawhub publish ./skills/blankfiles \
-  --slug filearchitect-blankfiles \
+  --slug blankfiles \
   --name "Blank Files Gateway" \
   --version 1.0.0 \
   --changelog "Initial release" \
@@ -26,7 +26,7 @@ clawhub publish ./skills/blankfiles \
 
 ```bash
 clawhub publish ./skills/blankfiles \
-  --slug filearchitect-blankfiles \
+  --slug blankfiles \
   --name "Blank Files Gateway" \
   --version 1.0.0 \
   --changelog "Initial release" \
@@ -37,7 +37,7 @@ clawhub publish ./skills/blankfiles \
 
 ```bash
 clawhub publish ./skills/blankfiles \
-  --slug filearchitect-blankfiles \
+  --slug blankfiles \
   --name "Blank Files Gateway" \
   --version 1.0.1 \
   --changelog "Add new binary formats and API guidance" \
