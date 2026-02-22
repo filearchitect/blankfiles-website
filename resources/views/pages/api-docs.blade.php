@@ -114,7 +114,7 @@
   "catalog": {
     "source_repository": "https://github.com/filearchitect/blank-files",
     "catalog_url": "https://raw.githubusercontent.com/filearchitect/blank-files/main/files/files.json",
-    "cdn_url": "https://cdn.jsdelivr.net/gh/filearchitect/blank-files@main",
+    "cdn_url": "https://raw.githubusercontent.com/filearchitect/blank-files/main",
     "file_count": 300,
     "type_count": 120,
     "category_count": 15
