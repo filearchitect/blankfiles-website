@@ -18,6 +18,8 @@
                 'dataset' => [
                     '@type' => 'Dataset',
                     'name' => 'Blank Files Catalog',
+                    'description' => 'Catalog of minimal valid blank binary files grouped by category and extension for upload testing and automation.',
+                    'url' => url('/api/v1/files'),
                     'distribution' => [
                         '@type' => 'DataDownload',
                         'contentUrl' => url('/api/v1/files'),
