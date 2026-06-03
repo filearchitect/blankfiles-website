@@ -71,6 +71,21 @@ test('sitemap supports conditional get with etag', function () {
     $second->assertStatus(304);
 });
 
+test('sitemap uses forwarded https scheme for absolute urls', function () {
+    $response = $this
+        ->withServerVariables([
+            'REMOTE_ADDR' => '172.70.0.1',
+            'HTTP_X_FORWARDED_PROTO' => 'https',
+            'HTTP_X_FORWARDED_HOST' => 'blankfiles.com',
+            'HTTP_X_FORWARDED_PORT' => '443',
+        ])
+        ->get('/sitemap.xml');
+
+    $response->assertOk();
+    expect($response->getContent())->toContain('<loc>https://blankfiles.com');
+    expect($response->getContent())->not->toContain('<loc>http://');
+});
+
 test('api status returns catalog metadata with cache validators', function () {
     $response = $this->getJson('/api/v1/status');
 
