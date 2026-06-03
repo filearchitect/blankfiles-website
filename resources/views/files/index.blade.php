@@ -38,13 +38,7 @@
         @endphp
 
         <section class="mb-4 rounded-lg border border-gray-200 bg-gray-50 p-5">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-                <h2 class="text-2xl font-semibold text-gray-900">Popular File Formats</h2>
-                <a href="{{ route('upload-testing') }}"
-                    class="inline-flex rounded bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-800">
-                    Upload Testing Guide
-                </a>
-            </div>
+            <h2 class="text-2xl font-semibold text-gray-900">Popular File Formats</h2>
             <p class="mt-2 text-gray-600">Quick links to the most-used binary file formats.</p>
             <div class="mt-4 flex flex-wrap gap-2">
                 @foreach ($quickFiles as $quickFile)
